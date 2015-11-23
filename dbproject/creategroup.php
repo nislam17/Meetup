@@ -15,17 +15,17 @@ if(!isset($_SESSION["username"])) {
 }
 else {
   //if the user have entered a message, insert it into database
-  if(isset($_POST["group name"]) && isset($_POST["description"])) {
+  if(isset($_POST["groupname"]) && isset($_POST["description"])) {
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
-    if ($stmt = $mysqli->prepare("insert into group (group_name, description, user_id) values (?,?,?)")) {
-      $stmt->bind_param("is", $_POST["group name"], $_POST["description"], $_SESSION["user_id"]);
+    if ($stmt = $mysqli->prepare("insert into group (group_name, description, username) values (?,?,?)")) {
+      $stmt->bind_param("sss", $_POST["groupname"], $_POST["description"], $_SESSION["username"]);
       $stmt->execute();
       $stmt->close();
-	  $user_id = htmlspecialchars($_SESSION["user_id"]);
+	  $username = htmlspecialchars($_SESSION["username"]);
 	  echo "Your group was created. \n";
-      echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?user_id=$user_id\">here</a>.";
-      header("refresh: 3; view.php?user_id=$user_id");
+      echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
+      header("refresh: 3; view.php?username=$username");
     }  
   }
   //if not then display the form for posting message
@@ -33,11 +33,11 @@ else {
     echo "Group Name: <br /><br />\n";
     echo '<form action="creategroup.php" method="POST">';
     echo "\n";	
-    echo '<textarea cols="20" rows="1" name="group name" /></textarea><br />';
+    echo '<textarea cols="20" rows="1" name="groupname" /></textarea><br />';
     echo "\n";
-	 echo "Description: <br /><br />\n";
-    echo '<form action="creategroup.php" method="POST">';
-    echo "\n";	
+	echo "Description: <br /><br />\n";
+    //echo '<form action="creategroup.php" method="POST">';
+    //echo "\n";	
     echo '<textarea cols="40" rows="20" name="description" /></textarea><br />';
     echo "\n";
 	echo '<input type="submit" value="Submit" />';

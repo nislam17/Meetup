@@ -15,8 +15,8 @@ if(!isset($_SESSION["username"])) {
 else {
   $username = htmlspecialchars($_SESSION["username"]);
   echo "Welcome $username. You are logged in.<br /><br />\n";
-  echo 'You may view the meetups listed below, <a href="view.php?user_id=';
-  echo htmlspecialchars($_SESSION["user_id"]);
+  echo 'You may view the meetups listed below, <a href="view.php?username=';
+  echo htmlspecialchars($_SESSION["username"]);
   echo '">view your upcoming events</a>, or <a href="creategroup.php">create a group</a>, or <a href="logout.php">logout</a>.';
   echo "\n";
 }

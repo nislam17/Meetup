@@ -7,8 +7,8 @@
 include ("include.php");
 
 //check if the user exists and prints out username, if not redirects back to homepage
-if ($stmt = $mysqli->prepare("select username from users where user_id = ?")) {
-  $stmt->bind_param("s", $_GET["user_id"]);
+if ($stmt = $mysqli->prepare("select username from member where username = ?")) {
+  $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($username);
   if($stmt->fetch()) {
