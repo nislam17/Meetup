@@ -15,7 +15,7 @@ if(isset($_SESSION["username"])) {
 }
 else {
   //if the user have entered _all_ entries in the form, insert into database
-  if(isset($_POST["username"]) && isset($_POST["password"])) {
+  if(isset($_POST["firstname"]) && isset($_POST["lastname"]) && isset($_POST["zip"]) && isset($_POST["username"]) && isset($_POST["password"])) {
 
     //check if username already exists in database
     if ($stmt = $mysqli->prepare("select username from member where username = ?")) {
@@ -31,8 +31,8 @@ else {
 		//if not then insert the entry into database, note that user_id is set by auto_increment
 		else {
 		    $stmt->close();
-		    if ($stmt = $mysqli->prepare("insert into member (username,password) values (?,?)")) {
-              $stmt->bind_param("ss", $_POST["username"], md5($_POST["password"]));
+		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname,zip) values (?,?,?,?,?)")) {
+              $stmt->bind_param("ss", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"], $_POST["zip"]);
               $stmt->execute();
               $stmt->close();
               echo "Registration complete, click <a href=\"index.php\">here</a> to return to homepage."; 
@@ -45,6 +45,12 @@ else {
     echo "Enter your information below: <br /><br />\n";
     echo '<form action="register.php" method="POST">';
     echo "\n";	
+	echo 'First Name: <input type="text" name="firstname" /><br />';
+    echo "\n";
+    echo 'Last Name: <input type="text" name="lastname" /><br />';
+    echo "\n";
+	echo 'Zip Code: <input type="text" name="zip" /><br />';
+    echo "\n";
     echo 'Username: <input type="text" name="username" /><br />';
     echo "\n";
 	echo 'Password: <input type="password" name="password" /><br />';
