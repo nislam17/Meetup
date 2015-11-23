@@ -32,7 +32,7 @@ else {
 		else {
 		    $stmt->close();
 		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname,zip) values (?,?,?,?,?)")) {
-              $stmt->bind_param("ss", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"], $_POST["zip"]);
+              $stmt->bind_param("ssssi", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"], $_POST["zip"]);
               $stmt->execute();
               $stmt->close();
               echo "Registration complete, click <a href=\"index.php\">here</a> to return to homepage."; 
