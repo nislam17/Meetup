@@ -16,11 +16,13 @@ if(isset($_SESSION["username"])) {
 else {
   //if the user have entered _all_ entries in the form, insert into database
   if(isset($_POST["firstname"]) && isset($_POST["lastname"]) && isset($_POST["zip"]) && isset($_POST["username"]) && isset($_POST["password"])) {
-
+	echo "heloooooooooooooooooooooooo";
     //check if username already exists in database
     if ($stmt = $mysqli->prepare("select username from member where username = ?")) {
+	echo "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
       $stmt->bind_param("s", $_POST["username"]);
       $stmt->execute();
+	  echo "thereeeeeeeeeeeeeee";
       $stmt->bind_result($username);
         if ($stmt->fetch()) {
           echo "That username already exists. ";
@@ -30,9 +32,10 @@ else {
         }
 		//if not then insert the entry into database, note that user_id is set by auto_increment
 		else {
+			echo "doneeeeeeeeeeeeeeee";
 		    $stmt->close();
-		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname,zip) values (?,?,?,?,?)")) {
-              $stmt->bind_param("ss", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"], $_POST["zip"]);
+		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname) values (?,?,?,?)")) {
+			  $stmt->bind_param("ssss", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"]);
               $stmt->execute();
               $stmt->close();
               echo "Registration complete, click <a href=\"index.php\">here</a> to return to homepage."; 
