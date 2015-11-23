@@ -18,13 +18,12 @@ else {
   if(isset($_POST["username"]) && isset($_POST["password"])) {
 
     //check if entry exists in database
-    if ($stmt = $mysqli->prepare("select * from member where username = ? and password = ?")) {
+    if ($stmt = $mysqli->prepare("select username,password from member where username = ? and password = ?")) {
       $stmt->bind_param("ss", $_POST["username"], md5($_POST["password"]));
       $stmt->execute();
-      $stmt->bind_result($user_id, $username, $password);
+      $stmt->bind_result($username, $password);
 	    //if there is a match set session variables and send user to homepage
         if ($stmt->fetch()) {
-		  $_SESSION["user_id"] = $user_id;
 		  $_SESSION["username"] = $username;
 		  $_SESSION["password"] = $password;
 		  $_SESSION["REMOTE_ADDR"] = $_SERVER["REMOTE_ADDR"]; //store clients IP address to help prevent session hijack
