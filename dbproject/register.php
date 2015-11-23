@@ -34,13 +34,9 @@ else {
 		else {
 			echo "doneeeeeeeeeeeeeeee";
 		    $stmt->close();
-<<<<<<< HEAD
-		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname,zip) values (?,?,?,?,?)")) {
-              $stmt->bind_param("ssssi", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"], $_POST["zip"]);
-=======
 		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname) values (?,?,?,?)")) {
 			  $stmt->bind_param("ssss", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"]);
->>>>>>> 3f85ee74c933f64bcc08163b20c207ccef22623d
+
               $stmt->execute();
               $stmt->close();
               echo "Registration complete, click <a href=\"index.php\">here</a> to return to homepage."; 
