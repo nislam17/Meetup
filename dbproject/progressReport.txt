@@ -1,0 +1,14 @@
+Additional features:
+
+A member will be able to select an event and see if the time conflicts with an event that they plan on going to.
+select title,start_time,end_time
+from (events natural join attend) e
+where username = ? and (event_id,username) not in (
+	select event_id,username
+	from events natural join attend
+	where e.start_time > end_time or e.end_time < start_time
+	)
+
+A member will be able to see groups that have the same interests as groups he/she is already in
+
+An authorized user can edit the location and time of an event
