@@ -19,7 +19,7 @@ else {
 
     //check if entry exists in database
     if ($stmt = $mysqli->prepare("select username,firstname,lastname from member where username = ? and password = ?")) {
-      $stmt->bind_param("ss", $_POST["username"], $_POST["password"]);
+      $stmt->bind_param("ss", $_POST["username"], md5($_POST["password"]));
       $stmt->execute();
       $stmt->bind_result($username, $firstname, $lastname);
 	    //if there is a match set session variables and send user to homepage

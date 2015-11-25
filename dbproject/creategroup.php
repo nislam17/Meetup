@@ -18,22 +18,22 @@ else {
   if(isset($_POST["groupname"]) && isset($_POST["description"])) {
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
-    if ($stmt = $mysqli->prepare("insert into _group (group_name, description, username) values (?,?,?)")) {
+    if ($stmt = $mysqli->prepare("insert into groups (group_name, description, username) values (?,?,?)")) {
       $stmt->bind_param("sss", $_POST["groupname"], $_POST["description"], $_SESSION["username"]);
       $stmt->execute();
       $stmt->close();
-	  /*
-	  $stmt = $mysqli->prepare(select group_id from _group where username = ? and (group_id,username) not in (select group_id,username from groupuser));
-	  $stmt->bind_param("s", "$_SESSION["username"]);
+
+	  $stmt = $mysqli->prepare("select group_id from groups where username = ? and (group_id,username) not in (select group_id,username from belongs_to)");
+	  $stmt->bind_param("s", $_SESSION["username"]);
 	  $stmt->execute();
 	  $stmt->bind_result($id);
 	  $stmt->close();
 	  
-	  $stmt = $mysqli->prepare("insert into groupuser (group_id, username, authorized) values (?,?,1)")
+	  $stmt = $mysqli->prepare("insert into belongs_to (group_id, username, authorized) values (?,?,1)");
       $stmt->bind_param("is", $id, $_SESSION["username"]);
 	  $stmt->execute();
       $stmt->close();
-*/
+
 	  $username = htmlspecialchars($_SESSION["username"]);
 	  echo "Your group was created. \n";
       //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
