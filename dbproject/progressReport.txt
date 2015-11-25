@@ -1,3 +1,11 @@
+State of the webpages:
+in order to start, run index.php
+the login, register, and logout should work just fine, but register currently does not save the zip to the database
+the "create a group" link should work, but currently does not include interests
+the "my groups" link should also work, but group_pages are not formatted yet
+the "my upcoming events" page does not work at all yet
+there is currently no way of creating events or interests
+
 Additional features:
 
 A member will be able to select an event and see if the time conflicts with an event that they plan on going to.
@@ -9,6 +17,35 @@ where username = ? and (event_id,username) not in (
 	where e.start_time > end_time or e.end_time < start_time
 	)
 
+?: current user's username
+
 A member will be able to see groups that have the same interests as groups he/she is already in
+select distinct group_id,group_name
+from groups natural join about
+where (interest_name) in (
+	select interest_name
+	from belongs_to natural join about
+	where username = ?
+    )
+    and (group_id) not in (
+	select group_id 
+	from belongs_to
+	where username = ?
+	)
+both ?'s represent the current user's username
 
 An authorized user can edit the location and time of an event
+update events 
+set lname=?,zip=?,start_time=?,end_time=?
+where (group_id) in (
+	select group_id
+	from belongs_to
+	where username = ? and authorized = 1
+	)
+
+first set of ?'s represent the new values for the respective field
+the last ? represents the current user's username
+
+select event_id,title,description,start_time,end_time,group_name
+from (attend a join events using (event_id)) join groups using (group_id)
+where a.username = ?
