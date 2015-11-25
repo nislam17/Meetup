@@ -26,7 +26,7 @@ if ($stmt = $mysqli->prepare("select username from member where username = ?")) 
 
 //check if the user is also the one who is logged in
 if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
-  echo 'These are your groups. You may click <a href="post.php">here</a> to post.<br />';
+  echo 'These are your groups.<br />'; // You may click <a href="post.php">here</a> to post.<br />';
   echo "\n";
 }
 
