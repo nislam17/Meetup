@@ -8,7 +8,7 @@ there is currently no way of creating events or interests
 
 Additional features:
 
-A member will be able to select an event and see if the time conflicts with an event that they plan on going to.
+A member will be able to select an event and see if the time conflicts with an event that they plan on going to. (Matthew)
 select title,start_time,end_time
 from (events natural join attend) e
 where username = ? and (event_id,username) not in (
@@ -19,7 +19,7 @@ where username = ? and (event_id,username) not in (
 
 ?: current user's username
 
-A member will be able to see groups that have the same interests as groups he/she is already in
+A member will be able to see groups that have the same interests as groups he/she is already in (Matthew)
 select distinct group_id,group_name
 from groups natural join about
 where (interest_name) in (
@@ -35,7 +35,7 @@ where (interest_name) in (
 both ?'s represent the current user's username
 
 An authorized user can edit the location and time of an event
-update events 
+update events (Matthew)
 set lname=?,zip=?,start_time=?,end_time=?
 where (group_id) in (
 	select group_id
@@ -45,10 +45,6 @@ where (group_id) in (
 
 first set of ?'s represent the new values for the respective field
 the last ? represents the current user's username
-
-select event_id,title,description,start_time,end_time,group_name
-from (attend a join events using (event_id)) join groups using (group_id)
-where a.username = ?
 
 A member can find events based on their own location (Nazifa)
 select event_id 
