@@ -69,9 +69,14 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
   $stmt->close();
 }
 
+if(isset($_SESSION["username"])){
   echo '<a href="groups.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
-  echo '">Go back</a><br />';
+  echo '">My Groups</a><br />';
+}
+
+echo '<a href="index.php">Go back</a><br /><br />';
+
 
 $mysqli->close();
 ?>

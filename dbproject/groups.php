@@ -26,8 +26,7 @@ if ($stmt = $mysqli->prepare("select username from member where username = ?")) 
 
 //check if the user is also the one who is logged in
 if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
-  echo 'These are your groups.<br />'; // You may click <a href="post.php">here</a> to post.<br />';
-  echo "\n";
+  echo 'These are your groups.'; // You may click <a href="post.php">here</a> to post.<br />';
 }
 
 //print out all the user's groups
@@ -52,7 +51,7 @@ if ($stmt = $mysqli->prepare("select group_id,group_name from groups join belong
 }
 
 echo '<a href="index.php">Go back</a><br /><br />';
-echo "\n";
+//echo "\n";
 
 $mysqli->close();
 ?>
