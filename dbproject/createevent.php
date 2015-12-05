@@ -32,11 +32,12 @@ if(!isset($_SESSION["username"])) {
   header("refresh: 3; index.php");
 }
 else {
-  //if the user have entered a message, insert it into database
+  //if the user have entered an event, insert it into database
+  //DOES NOT WORK YET, 1 == 0 USED AS A SAFETY
    if(isset($_POST["eventname"]) && isset($_POST["description"]) && (1 == 0)) {
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
-    if ($stmt = $mysqli->prepare("insert into groups (group_name, description, username) values (?,?,?)")) {
+    if ($stmt = $mysqli->prepare("insert into events (group_name, description, username) values (?,?,?)")) {
       $stmt->bind_param("sss", $_POST["groupname"], $_POST["description"], $_SESSION["username"]);
       $stmt->execute();
       $stmt->close();
@@ -68,14 +69,22 @@ else {
     echo "Event Name: <br /><br />\n";
     echo '<form action="createevent.php?group_id="';
 	echo $_GET["group_id"];
-	echo '" method="POST">';
-	
-    echo "\n";	
+	echo '" method="POST">';	
     echo '<textarea cols="20" rows="1" name="eventname" /></textarea><br />';
     echo "\n";
+	
 	echo "Description: <br /><br />\n";
     echo '<textarea cols="40" rows="20" name="description" /></textarea><br />';
     echo "\n";
+
+	echo "Start Time: <br /><br />\n";
+    echo '<input type="datetime-local" name="stime" /></textarea><br />';
+    echo "\n";
+	
+	echo "End Time: <br /><br />\n";
+    echo '<input type="datetime-local" name="etime" /></textarea><br />';
+    echo "\n";
+
 	echo '<input type="submit" value="Submit" />';
     echo "\n";
 	echo '</form>';

@@ -3,7 +3,7 @@
 
 //<!-- Example Blog written by Raymond Mui -->
 
-$mysqli = new mysqli("localhost", "root", "", "meetup");
+$mysqli = new mysqli("localhost", "root", "root", "meetup");
 
 /* check connection */
 if (mysqli_connect_errno()) {
