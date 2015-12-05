@@ -30,14 +30,26 @@ if ($stmt = $mysqli->prepare("select group_id,group_name from group where group_
 //  echo "\n";
 //}
 
+if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id = ? and username = ?")) {
+  $stmt->bind_param("is", $_GET["group_id"], $_SESSION["username"]);
+  $stmt->execute();
+  $stmt->bind_result($authorized);
+  if($stmt->fetch() && $authorized == 1){
+	echo "You are authorized <br />";
+	echo "<a href='createevent.php?group_id=";
+	echo $_GET["group_id"];
+	echo "'\>Create Event</a>";
+  }
+  $stmt->close();
+}
+
 //print out all the events for this group
 if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time from events where group_id = ?")) {
-   echo "I'm hereeeee";
   $stmt->bind_param("i", $_GET["group_id"]);
   $stmt->execute();
   $stmt->bind_result($id,$title,$description,$stime,$etime);
   echo '<table border="2" width="30%">';
-  echo "<tr><td>Event ID</td><td>Title</td><td>Description</td><td>Start Time</td><td>End Time</td></tr><br />";
+  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td></tr><br />";
   while($stmt->fetch()) {
 	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
 	//$time = htmlspecialchars($time);
@@ -57,8 +69,9 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
   $stmt->close();
 }
 
-echo '<a href="index.php">Go back</a><br /><br />';
-echo "\n";
+  echo '<a href="groups.php?username=';
+  echo htmlspecialchars($_SESSION["username"]);
+  echo '">Go back</a><br />';
 
 $mysqli->close();
 ?>
