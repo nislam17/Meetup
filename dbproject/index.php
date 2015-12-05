@@ -37,9 +37,9 @@ else {
   echo '<a href="logout.php">Logout</a><br /><br />';
 }
 
-if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_name from events e join groups using (group_id)")) {
+if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name from events e join groups using (group_id)")) {
   $stmt->execute();
-  $stmt->bind_result($id,$title,$description,$stime,$etime,$group);
+  $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group);
   echo '<table border="2" width="30%">';
   echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td></tr><br />";
   while($stmt->fetch()) {
@@ -53,7 +53,9 @@ if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end
 	echo "<td>$description</td>";
 	echo "<td>$stime</td>";
 	echo "<td>$etime</td>";
-	echo "<td>$group</td>";
+	echo "<td><a href='group_page.php?group_id=";
+	echo $gid;
+	echo "'\>$group</a></td>";
 	echo "</tr>";
   }
   echo "</table><br />\n";
