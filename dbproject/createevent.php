@@ -35,8 +35,9 @@ else {
   //if the user have entered an event, insert it into database
   //DOES NOT WORK YET, 1 == 0 USED AS A SAFETY
 
-   if(isset($_POST["eventname"]) && isset($_POST["description"]) && isset($_POST["stime"]) && isset($_POST["etime"]) && (1 == 0)) {
-
+   if(isset($_POST["eventname"]) && isset($_POST["description"]) && isset($_POST["stime"]) && isset($_POST["etime"])) {
+	
+	//echo $_POST["location"];
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
     if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time)values (?,?,?,?)")) {
