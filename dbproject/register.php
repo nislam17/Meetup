@@ -30,8 +30,8 @@ else {
 		//if not then insert the entry into database, note that user_id is set by auto_increment
 		else {
 		    $stmt->close();
-		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname) values (?,?,?,?)")) {
-			  $stmt->bind_param("ssss", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"]);
+		    if ($stmt = $mysqli->prepare("insert into member (username,password,firstname,lastname,zipcode) values (?,?,?,?,?)")) {
+			  $stmt->bind_param("ssssi", $_POST["username"], md5($_POST["password"]), $_POST["firstname"], $_POST["lastname"], $_POST["zip"]);
 
               $stmt->execute();
               $stmt->close();
