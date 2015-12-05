@@ -30,25 +30,36 @@ else {
  // echo '<a href="logout.php">Logout</a>';
   echo "\n";
 }
-echo "<br /><br />\n";
-if ($stmt = $mysqli->prepare("select username, user_id from users order by username")) {
-  $stmt->execute();
-  $stmt->bind_result($username, $user_id);
-  while ($stmt->fetch()) {
-    echo '<a href="view.php?user_id=';
-	echo htmlspecialchars($user_id);
-	$username = htmlspecialchars($username);
-	echo "\">$username's blog</a><br />\n";
-  }
-  $stmt->close();
-  $mysqli->close();
-}
 if(!isset($_SESSION["username"])) {
-  echo '<a href="login.php">Login</a> or <a href="register.php">register</a>.';
+  echo '<a href="login.php">Login</a> or <a href="register.php">register</a><br /><br />.';
 }
 else {
-  echo '<a href="logout.php">Logout</a>';
+  echo '<a href="logout.php">Logout</a><br /><br />';
 }
+
+if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_name from events e join groups using (group_id)")) {
+  $stmt->execute();
+  $stmt->bind_result($id,$title,$description,$stime,$etime,$group);
+  echo '<table border="2" width="30%">';
+  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td></tr><br />";
+  while($stmt->fetch()) {
+	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
+	//$time = htmlspecialchars($time);
+	//echo '<table border="2" width="30%"><tr><td>';
+	echo "\n";
+	echo "<tr>";
+	echo "<td>$id</td>";
+	echo "<td>$title</td>";
+	echo "<td>$description</td>";
+	echo "<td>$stime</td>";
+	echo "<td>$etime</td>";
+	echo "<td>$group</td>";
+	echo "</tr>";
+  }
+  echo "</table><br />\n";
+  $stmt->close();
+}
+
 
 ?>
 
