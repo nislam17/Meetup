@@ -49,18 +49,18 @@ else {
   else {
     echo "Group Name: <br /><br />\n";
     echo '<form action="creategroup.php" method="POST">';
-    echo "\n";	
+    echo "<br />";	
     echo '<textarea cols="20" rows="1" name="groupname" /></textarea><br />';
-    echo "\n";
+    echo "<br />";
 	echo "Description: <br /><br />\n";
     //echo '<form action="creategroup.php" method="POST">';
     //echo "\n";	
     echo '<textarea cols="40" rows="20" name="description" /></textarea><br />';
-    echo "\n";
+    echo "<br />";
 	echo '<input type="submit" value="Submit" />';
-    echo "\n";
+    echo "<br />";
 	echo '</form>';
-	echo "\n";
+	echo "<br />";
 	echo '<br /><a href="index.php">Go back</a>';
 
   }

@@ -71,25 +71,29 @@ else {
 	echo $_GET["group_id"];
 	echo '" method="POST">';	
     echo '<textarea cols="20" rows="1" name="eventname" /></textarea><br />';
-    echo "\n";
+    echo "<br />";
 	
 	echo "Description: <br /><br />\n";
     echo '<textarea cols="40" rows="20" name="description" /></textarea><br />';
-    echo "\n";
+    echo "<br />";
 
 	echo "Start Time: <br /><br />\n";
     echo '<input type="datetime-local" name="stime" /></textarea><br />';
-    echo "\n";
+    echo "<br />";
 	
 	echo "End Time: <br /><br />\n";
     echo '<input type="datetime-local" name="etime" /></textarea><br />';
-    echo "\n";
+    echo "<br />";
 
 	echo '<input type="submit" value="Submit" />';
-    echo "\n";
+    echo "<br />";
 	echo '</form>';
-	echo "\n";
-	echo '<br /><a href="index.php">Go back</a>';
+	echo "<br />";
+	
+	echo "<br />";
+    echo '<a href="group_page.php?group_id=';
+    echo $_GET["group_id"];
+    echo '">Go back</a><br />';
 
   }
 }
