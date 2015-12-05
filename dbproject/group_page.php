@@ -25,26 +25,32 @@ if ($stmt = $mysqli->prepare("select group_id,group_name from group where group_
 }
 
 //check if the user is also the one who is logged in
-if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
-  echo 'These are your groups. You may click <a href="post.php">here</a> to post.<br />';
-  echo "\n";
-}
+//if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
+//  echo 'These are your groups. You may click <a href="post.php">here</a> to post.<br />';
+//  echo "\n";
+//}
 
-//print out all the messages from this user in a pretty table
-if ($stmt = $mysqli->prepare("select group_id,group_name from groups join belongs_to b using (group_id) where b.username = ?")) {
-  $stmt->bind_param("i", $_GET["username"]);
+//print out all the events for this group
+if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time from events where group_id = ?")) {
+   echo "I'm hereeeee";
+  $stmt->bind_param("i", $_GET["group_id"]);
   $stmt->execute();
-  $stmt->bind_result($id,$name);
+  $stmt->bind_result($id,$title,$description,$stime,$etime);
   echo '<table border="2" width="30%">';
-  echo "<tr><td>Group ID</td><td>Group Name</td></tr><br />";
+  echo "<tr><td>Event ID</td><td>Title</td><td>Description</td><td>Start Time</td><td>End Time</td></tr><br />";
   while($stmt->fetch()) {
-	$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
+	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
 	//$time = htmlspecialchars($time);
 	//echo '<table border="2" width="30%"><tr><td>';
 	echo "\n";
-	echo "<tr><td>$id</td><td><a href='group_page.php?group_id=";
-	echo $id;
-	echo "'\>$name</a></td></tr>";
+	echo "<tr>";
+	echo "<td>$id</td>";
+	echo "<td>$title</td>";
+	echo "<td>$description</td>";
+	echo "<td>$stime</td>";
+	echo "<td>$etime</td>";
+	//echo $id;
+	echo "</tr>";
 	//echo "</td></tr></table><br />\n";
   }
   echo "</table><br />\n";
