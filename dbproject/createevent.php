@@ -34,7 +34,7 @@ if(!isset($_SESSION["username"])) {
 else {
   //if the user have entered an event, insert it into database
   //DOES NOT WORK YET, 1 == 0 USED AS A SAFETY
-   if(isset($_POST["eventname"]) && isset($_POST["description"]) && (1 == 0)) {
+   if(isset($_POST["eventname"]) && isset($_POST["description"]) && isset($_POST["stime"]) && isset($_POST["etime"]) && (1 == 0)) {
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
     if ($stmt = $mysqli->prepare("insert into events (group_name, description, username) values (?,?,?)")) {
@@ -84,11 +84,33 @@ else {
 	echo "End Time: <br /><br />\n";
     echo '<input type="datetime-local" name="etime" /></textarea><br />';
     echo "<br />";
+	
+	echo "Location: <br /><br />";
+	echo '<select name="location">';
+	$stmt = $mysqli->prepare("select lname,zip from location");
+    $stmt->execute();
+    $stmt->bind_result($lname,$zip);
+    while($stmt->fetch()){
+		echo '<option value="';
+		echo "'name_zip':[";
+		echo $lname;
+		echo ',';
+		echo $zip;
+		echo ']}">';
+		echo $lname;
+		echo " (";
+		echo $zip;
+		echo ")";
+		echo "</option>";
+	}
+	echo "</select><br /><br />";
+    $stmt->close();
 
 	echo '<input type="submit" value="Submit" />';
     echo "<br />";
 	echo '</form>';
 	echo "<br />";
+
 	
 	echo "<br />";
     echo '<a href="group_page.php?group_id=';
