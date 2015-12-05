@@ -34,26 +34,27 @@ if(!isset($_SESSION["username"])) {
 else {
   //if the user have entered an event, insert it into database
   //DOES NOT WORK YET, 1 == 0 USED AS A SAFETY
-   if(isset($_POST["eventname"]) && isset($_POST["description"]) && (1 == 0)) {
+   if(isset($_POST["eventname"]) && isset($_POST["description"]))// && (1 == 0))
+   {
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
-    if ($stmt = $mysqli->prepare("insert into events (group_name, description, username) values (?,?,?)")) {
-      $stmt->bind_param("sss", $_POST["groupname"], $_POST["description"], $_SESSION["username"]);
+    if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time)values (?,?,?,?)")) {
+      $stmt->bind_param("ssii", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"]);
       $stmt->execute();
       $stmt->close();
 
-	  $stmt = $mysqli->prepare("select group_id from groups where username = ? and (group_id,username) not in (select group_id,username from belongs_to)");
-	  $stmt->bind_param("s", $_SESSION["username"]);
-	  $stmt->execute();
-	  $stmt->bind_result($id);
-	  $stmt->fetch();
-	  echo $id;
-	  $stmt->close();
+//	 $stmt = $mysqli->prepare("select group_id from groups where username = ? and (group_id,username) not in (select group_id,username from belongs_to)");
+//	  $stmt->bind_param("s", $_SESSION["username"]);
+//	  $stmt->execute();
+//	  $stmt->bind_result($id);
+//	  $stmt->fetch();
+//	  echo $id;
+//	  $stmt->close();
 	  
-	  $stmt = $mysqli->prepare("insert into belongs_to (group_id, username, authorized) values (?,?,1)");
-      $stmt->bind_param("is", $id, $_SESSION["username"]);
-	  $stmt->execute();
-      $stmt->close();
+//	  $stmt = $mysqli->prepare("insert into belongs_to (group_id, username, authorized) values (?,?,1)");
+  //    $stmt->bind_param("is", $id, $_SESSION["username"]);
+//	  $stmt->execute();
+  //    $stmt->close();
 
 	  $username = htmlspecialchars($_SESSION["username"]);
 	  echo "Your group was created. \n";
@@ -64,6 +65,7 @@ else {
 
     }  
   }
+ 
    //if not then display the form for posting message
   else {
     echo "Event Name: <br /><br />\n";
