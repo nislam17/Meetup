@@ -45,7 +45,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 	if($authorized == 1){
 		echo "You are authorized <br />";
 		echo "<a href='createevent.php?group_id=";
-		echo $_GET["group_id"];
+		echo $id;
 		echo "'\>Create Event</a>";
 	}
   }

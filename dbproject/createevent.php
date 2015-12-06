@@ -8,14 +8,14 @@
 include "include.php";
 
 //check if the group exists and prints out group, if not redirects back to homepage
-if ($stmt = $mysqli->prepare("select group_id,group_name from group where group_id = ?")) {
+if ($stmt = $mysqli->prepare("select group_id,group_name from groups where group_id = ?")) {
   $stmt->bind_param("i", $_GET["group_id"]);//, $_GET["group_name"]);
   $stmt->execute();
   $stmt->bind_result($id,$name);
   if($stmt->fetch()) {
 	$name = htmlspecialchars($name);
 	echo "<title>[$id] $name</title>\n";
-	echo "$name<br />\n";
+	echo "<h1>$name</h1>\n";
   }
   else {
     echo "Group not found. \n";
@@ -41,7 +41,12 @@ else {
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
     if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time, group_id, lname, zip ) values (?,?,?,?,?,?,?)")) {
-     $values = explode(':',$_POST["location"]);
+     $values = explode('|',$_POST["location"]);
+	 echo $_POST["eventname"];// $_POST["description"] $_POST["stime"] $_POST["etime"] $id;
+	 echo "<br />";
+	 echo $values[0];
+     echo "<br />";
+	 echo $values[1];
      $stmt->bind_param("ssssisi", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"], $id, $values[0], $values[1]);
       $stmt->execute();
       $stmt->close();
@@ -57,7 +62,7 @@ else {
 	  echo $_GET["group_id"];
 	  echo "'\> here</a>";
 
-      header("refresh: 3; group_page.php?group_id=$id");
+      //header("refresh: 3; group_page.php?group_id=$id");
 
     }  
   }
@@ -65,7 +70,7 @@ else {
    //if not then display the form for posting message
   else {
     echo "Event Name: <br /><br />\n";
-    echo '<form action="createevent.php?group_id="';
+    echo '<form action="createevent.php?group_id=';
 	echo $_GET["group_id"];
 	echo '" method="POST">';	
     echo '<textarea cols="20" rows="1" name="eventname" /></textarea><br />';
@@ -89,11 +94,11 @@ else {
     $stmt->execute();
     $stmt->bind_result($lname,$zip);
     while($stmt->fetch()){
-		echo '<option value=';
+		echo '<option value="';
 		echo $lname;
-		echo ':';
+		echo '|';
 		echo $zip;
-		echo '>';
+		echo '">';
 		echo $lname;
 		echo " (";
 		echo $zip;
