@@ -49,7 +49,7 @@ else {
 
 	  //$username = htmlspecialchars($_SESSION["username"]);
 
-	  echo "Your group was created. \n";
+	  echo "Your event was created. \n";
       //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
       //header("refresh: 3; view.php?username=$username");
 	  echo "You will be returned to the group page in 3 seconds or click";		

@@ -75,7 +75,9 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
 	echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";
-	echo "<td>$title</td>";
+	echo "<td><a href='event_page.php?event_id=";
+	echo $id;
+	echo "'\>$title</a></td>";
 	echo "<td>$description</td>";
 	echo "<td>$stime</td>";
 	echo "<td>$etime</td>";

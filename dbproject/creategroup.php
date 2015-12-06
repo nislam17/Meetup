@@ -28,7 +28,7 @@ else {
 	  $stmt->execute();
 	  $stmt->bind_result($id);
 	  $stmt->fetch();
-	  echo $id;
+	  //echo $id;
 	  $stmt->close();
 	  
 	  $stmt = $mysqli->prepare("insert into belongs_to (group_id, username, authorized) values (?,?,1)");
