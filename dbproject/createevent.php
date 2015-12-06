@@ -42,11 +42,6 @@ else {
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
     if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time, group_id, lname, zip ) values (?,?,?,?,?,?,?)")) {
      $values = explode('|',$_POST["location"]);
-	 echo $_POST["eventname"];// $_POST["description"] $_POST["stime"] $_POST["etime"] $id;
-	 echo "<br />";
-	 echo $values[0];
-     echo "<br />";
-	 echo $values[1];
      $stmt->bind_param("ssssisi", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"], $id, $values[0], $values[1]);
       $stmt->execute();
       $stmt->close();
@@ -62,7 +57,7 @@ else {
 	  echo $_GET["group_id"];
 	  echo "'\> here</a>";
 
-      //header("refresh: 3; group_page.php?group_id=$id");
+      header("refresh: 3; group_page.php?group_id=$id");
 
     }  
   }
