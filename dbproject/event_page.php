@@ -85,9 +85,9 @@ if ($stmt = $mysqli->prepare("select event_id,title,start_time,end_time
 								where username = ? and (event_id,username) not in (
 									select event_id,username
 									from events natural join attend
-									where e.start_time > end_time or e.end_time < start_time or event_id = ?
+									where ? > end_time or ? < start_time or event_id = ?
 								)")) {
-  $stmt->bind_param("si", $_SESSION["username"], $_GET["event_id"]);
+  $stmt->bind_param("sssi", $_SESSION["username"], $stime, $etime, $_GET["event_id"]);
   $stmt->execute();
   $stmt->bind_result($id,$title,$stime,$etime);
   echo '<table border="2" width="30%">';

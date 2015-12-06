@@ -5,20 +5,19 @@ the "create a group" link should work, but currently does not include interests
 the "my groups" and "my upcoming events" links should also work
 the "create event" page does not work at all yet
 there is currently no way of creating interests
-the "potential time conflicts" query is bugged
 
 Additional features:
 
 A member will be able to select an event and see if the time conflicts with an event that they plan on going to. (Matthew)
-select title,start_time,end_time
+select event_id,title,start_time,end_time
 from (events e natural join attend)
 where username = ? and (event_id,username) not in (
 	select event_id,username
 	from events natural join attend
-	where e.start_time > end_time or e.end_time < start_time or event_id = ?
+	where ? > end_time or ? < start_time or event_id = ?
 	)
 
-?: current user's username and the selected event's event_id
+?: current user's username, selected event's start_time, selected event's end_time, and the selected event's event_id
 
 A member will be able to see groups that have the same interests as groups he/she is already in (Matthew)
 select distinct group_id,group_name
