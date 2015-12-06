@@ -40,8 +40,9 @@ else {
 	//echo $_POST["location"];
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
-    if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time)values (?,?,?,?)")) {
-      $stmt->bind_param("ssii", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"]);
+    if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time, lname, zip )values (?,?,?,?,?,?)")) {
+     $values = explode(':',$_POST["location"]);
+     $stmt->bind_param("sssssi", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"], $values[0], $values[1]);
       $stmt->execute();
       $stmt->close();
 
@@ -59,7 +60,8 @@ else {
   //    $stmt->close();
 
 	  $username = htmlspecialchars($_SESSION["username"]);
-	  echo "Your group was created. \n";
+
+echo "Your group was created. \n";
       //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
       //header("refresh: 3; view.php?username=$username");
 	  echo "You will be returned to your homepage in 3 seconds or click <a href=\"index.php\">here</a>.";
@@ -95,12 +97,11 @@ else {
     $stmt->execute();
     $stmt->bind_result($lname,$zip);
     while($stmt->fetch()){
-		echo '<option value="';
-		echo "'name_zip':[";
+		echo '<option value=';
 		echo $lname;
-		echo ',';
+		echo ':';
 		echo $zip;
-		echo ']}">';
+		echo '>';
 		echo $lname;
 		echo " (";
 		echo $zip;
