@@ -21,7 +21,7 @@ else {
   echo '">My groups</a><br />';
 
   
-  echo '<a href="view.php?username=';
+  echo '<a href="events.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
   echo '">My upcoming events</a><br />';
   

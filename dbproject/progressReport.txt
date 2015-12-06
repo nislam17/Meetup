@@ -2,10 +2,10 @@ State of the webpages:
 in order to start, run index.php
 the login, register, and logout should work just fine
 the "create a group" link should work, but currently does not include interests
-the "my groups" link should also work
-the "my upcoming events" page does not work at all yet
+the "my groups" and "my upcoming events" links should also work
 the "create event" page does not work at all yet
 there is currently no way of creating interests
+the "potential time conflicts" query is bugged
 
 Additional features:
 
