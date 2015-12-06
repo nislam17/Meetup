@@ -9,7 +9,7 @@ include "include.php";
 
 //check if the group exists and prints out group, if not redirects back to homepage
 if ($stmt = $mysqli->prepare("select group_id,group_name from group where group_id = ?")) {
-  $stmt->bind_param("is", $_GET["group_id"]);//, $_GET["group_name"]);
+  $stmt->bind_param("i", $_GET["group_id"]);//, $_GET["group_name"]);
   $stmt->execute();
   $stmt->bind_result($id,$name);
   if($stmt->fetch()) {
@@ -40,32 +40,24 @@ else {
 	//echo $_POST["location"];
 
     //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
-    if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time, lname, zip )values (?,?,?,?,?,?)")) {
+    if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time, group_id, lname, zip ) values (?,?,?,?,?,?,?)")) {
      $values = explode(':',$_POST["location"]);
-     $stmt->bind_param("sssssi", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"], $values[0], $values[1]);
+     $stmt->bind_param("ssssisi", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"], $id, $values[0], $values[1]);
       $stmt->execute();
       $stmt->close();
 
-//	 $stmt = $mysqli->prepare("select group_id from groups where username = ? and (group_id,username) not in (select group_id,username from belongs_to)");
-//	  $stmt->bind_param("s", $_SESSION["username"]);
-//	  $stmt->execute();
-//	  $stmt->bind_result($id);
-//	  $stmt->fetch();
-//	  echo $id;
-//	  $stmt->close();
-	  
-//	  $stmt = $mysqli->prepare("insert into belongs_to (group_id, username, authorized) values (?,?,1)");
-  //    $stmt->bind_param("is", $id, $_SESSION["username"]);
-//	  $stmt->execute();
-  //    $stmt->close();
 
-	  $username = htmlspecialchars($_SESSION["username"]);
+	  //$username = htmlspecialchars($_SESSION["username"]);
 
-echo "Your group was created. \n";
+	  echo "Your group was created. \n";
       //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
       //header("refresh: 3; view.php?username=$username");
-	  echo "You will be returned to your homepage in 3 seconds or click <a href=\"index.php\">here</a>.";
-      header("refresh: 3; index.php");
+	  echo "You will be returned to the group page in 3 seconds or click";		
+	  echo "<a href='group_page.php?group_id=";
+	  echo $_GET["group_id"];
+	  echo "'\> here</a>";
+
+      header("refresh: 3; group_page.php?group_id=$id");
 
     }  
   }
