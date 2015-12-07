@@ -66,7 +66,7 @@ if ($stmt = $mysqli->prepare("select rsvp from attend join events using (event_i
 		//echo "'\>Create Event</a>";
 	}
   }
-  else if (!isset($_POST['rsvp'])){
+  else if (!isset($_POST['rsvp']) && isset($_SESSION["username"])){
 	echo "You are not RSVP'd.";
 	echo '<form action="event_page.php?event_id=';
 	echo $id;

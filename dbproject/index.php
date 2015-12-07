@@ -37,12 +37,23 @@ else {
   echo '<a href="logout.php">Logout</a><br /><br />';
 }
 
-if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name from events e join groups using (group_id)")) {
+if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name,rsvp,a.username 
+							  from (events e natural left outer join attend a) join groups using (group_id)
+							  where a.username = ? or (event_id) not in 
+								(select event_id
+								from attend
+								where username = ?)
+							  ")) {
+  $stmt->bind_param("ss", $_SESSION["username"], $_SESSION["username"]);								  
   $stmt->execute();
-  $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group);
+  $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group,$rsvp,$uname);
   echo '<table border="2" width="30%">';
-  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td></tr><br />";
+  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td><td>RSVP'd?</td></tr><br />";
   while($stmt->fetch()) {
+	$isRSVP = "no";
+	if (isset($rsvp) && $uname == $_SESSION["username"] && $rsvp == 1){
+		$isRSVP = "yes";
+	}
 	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
 	//$time = htmlspecialchars($time);
 	//echo '<table border="2" width="30%"><tr><td>';
@@ -58,6 +69,7 @@ if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end
 	echo "<td><a href='group_page.php?group_id=";
 	echo $gid;
 	echo "'\>$group</a></td>";
+	echo "<td>$isRSVP</td>";
 	echo "</tr>";
   }
   echo "</table><br />\n";

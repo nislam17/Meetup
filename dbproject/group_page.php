@@ -49,7 +49,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 		echo "'\>Create Event</a>";
 	}
   }
-  else if (!isset($_POST['joining'])){
+  else if (!isset($_POST['joining']) && isset($_SESSION["username"])){
 	echo "You are not in this group.";
 	echo '<form action="group_page.php?group_id=';
 	echo $id;
@@ -62,13 +62,23 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 }
 
 //print out all the events for this group
-if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time from events where group_id = ?")) {
-  $stmt->bind_param("i", $_GET["group_id"]);
+if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time,rsvp,username
+							  from events natural left outer join attend
+							  where group_id = ? and (username = ? or (event_id) not in 
+								(select event_id
+								from attend
+								where username = ?))
+                              ")) {
+  $stmt->bind_param("iss", $_GET["group_id"], $_SESSION["username"], $_SESSION["username"]);
   $stmt->execute();
-  $stmt->bind_result($id,$title,$description,$stime,$etime);
+  $stmt->bind_result($id,$title,$description,$stime,$etime,$rsvp,$uname);
   echo '<table border="2" width="30%">';
-  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td></tr><br />";
+  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>RSVP'd?</td></tr><br />";
   while($stmt->fetch()) {
+	$isRSVP = "no";
+	if (isset($rsvp) && $uname == $_SESSION["username"] && $rsvp == 1){
+		$isRSVP = "yes";
+	}
 	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
 	//$time = htmlspecialchars($time);
 	//echo '<table border="2" width="30%"><tr><td>';
@@ -81,6 +91,7 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
 	echo "<td>$description</td>";
 	echo "<td>$stime</td>";
 	echo "<td>$etime</td>";
+	echo "<td>$isRSVP</td>";
 	//echo $id;
 	echo "</tr>";
 	//echo "</td></tr></table><br />\n";
