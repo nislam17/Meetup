@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Example Blog written by Raymond Mui -->
 <html>
-<title>Post</title>
+<title>Create Group</title>
 
 <?php
 

@@ -116,6 +116,11 @@ if(isset($_SESSION["username"])){
   echo '<a href="groups.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
   echo '">My Groups</a><br />';
+  
+  echo '<a href="events.php?username=';
+  echo htmlspecialchars($_SESSION["username"]);
+  echo '">My Upcoming Events</a><br />';
+
 }
 
 echo '<a href="index.php">Go back</a><br /><br />';

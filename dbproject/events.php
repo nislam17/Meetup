@@ -13,7 +13,7 @@ if ($stmt = $mysqli->prepare("select username from member where username = ?")) 
   $stmt->bind_result($username);
   if($stmt->fetch()) {
 	$username = htmlspecialchars($username);
-	echo "<title>$username's groups</title>\n";
+	echo "<title>$username's Events</title>\n";
 	echo "$username's groups <br />\n";
   }
   else {

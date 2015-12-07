@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Example Blog written by Raymond Mui -->
 <html>
-<title>Blog Example</title>
+<title>Meetup</title>
 
 <?php
 
@@ -23,7 +23,7 @@ else {
   
   echo '<a href="events.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
-  echo '">My upcoming events</a><br />';
+  echo '">My Upcoming Events</a><br />';
   
   echo '<a href="creategroup.php">Create a group</a><br />';
   

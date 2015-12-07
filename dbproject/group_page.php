@@ -68,7 +68,7 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
 								(select event_id,max(username)
 								from attend
 								where username != ?
-                                group by username)) or username is null
+                                group by username) or username is null)
                               ")) {
   $stmt->bind_param("iss", $_GET["group_id"], $_SESSION["username"], $_SESSION["username"]);
   $stmt->execute();
