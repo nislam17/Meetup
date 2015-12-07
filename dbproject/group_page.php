@@ -46,7 +46,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 		echo "You are authorized <br />";
 		echo "<a href='createevent.php?group_id=";
 		echo $id;
-		echo "'\>Create Event</a>";
+		echo "'\>Create Event</a><br />";
 	}
   }
   else if (!isset($_POST['joining']) && isset($_SESSION["username"])){
@@ -64,10 +64,11 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 //print out all the events for this group
 if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time,rsvp,username
 							  from events natural left outer join attend
-							  where group_id = ? and (username = ? or (event_id) not in 
-								(select event_id
+							  where group_id = ? and (username = ? or (event_id,username) in 
+								(select event_id,max(username)
 								from attend
-								where username = ?))
+								where username != ?
+                                group by username)) or username is null
                               ")) {
   $stmt->bind_param("iss", $_GET["group_id"], $_SESSION["username"], $_SESSION["username"]);
   $stmt->execute();
