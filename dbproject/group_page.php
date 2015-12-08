@@ -8,7 +8,7 @@ include ("include.php");
 
 //check if the group exists and prints out group, if not redirects back to homepage
 if ($stmt = $mysqli->prepare("select group_id,group_name,description from groups where group_id = ?")) {
-  $stmt->bind_param("i", $_GET["group_id"]);//, $_GET["group_name"]);
+  $stmt->bind_param("i", $_GET["group_id"]);
   $stmt->execute();
   $stmt->bind_result($id,$name,$gdesc);
   if($stmt->fetch()) {
@@ -23,6 +23,22 @@ if ($stmt = $mysqli->prepare("select group_id,group_name,description from groups
     echo "You will be redirected in 3 seconds or click <a href=\"index.php\">here</a>.\n";
     header("refresh: 3; index.php");
   }
+  $stmt->close();
+}
+
+if ($stmt = $mysqli->prepare("select interest_name from groups natural join about where group_id = ?")) {
+  $stmt->bind_param("i", $_GET["group_id"]);
+  $stmt->execute();
+  $stmt->bind_result($iname);
+  echo "Group Interests: <br />";
+  while($stmt->fetch()) {
+	$iname = htmlspecialchars($iname);
+    echo "<a href='interest_page.php?interest_name=";
+	echo $iname;
+	echo "'\>$iname</a>";
+	echo "<br />";
+  }
+  echo "<br />";
   $stmt->close();
 }
 
@@ -44,11 +60,54 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
   $stmt->bind_result($authorized);
   if($stmt->fetch()){
 	echo "You are in this group <br />";
+	$stmt->close();
 	if($authorized == 1){
 		echo "You are authorized <br />";
-		echo "<a href='createevent.php?group_id=";
-		echo $id;
-		echo "'\>Create Event</a><br />";
+		
+		
+      if(isset($_POST["interest"])) {
+        //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
+        if ($stmt = $mysqli->prepare("insert into about (interest_name,group_id) values (?,?)")) {
+          $stmt->bind_param("ss", $_POST["interest"], $id);
+          $stmt->execute();
+          $stmt->close();
+    	  unset($iname);
+		  header("refresh: 1; group_page.php?group_id=$id");
+        }  
+      }
+
+      echo '<form action="group_page.php?group_id=';
+      echo $id;
+      echo '" method="POST">';	
+ 
+      echo '<select name="interest">';
+      if ($stmt = $mysqli->prepare("select * from interest where (interest_name) not in (select interest_name from about where group_id = ?)")){
+	    $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->bind_result($iname);
+        while($stmt->fetch()){
+	 	  echo '<option value="';
+ 		  echo $iname;
+		  echo '">';
+		  echo $iname;
+		  echo "</option>";
+		  
+  	    }
+		
+  	  echo "</select>";
+      $stmt->close();
+	  
+      }
+	  
+    echo '<input type="submit" value="Add interest" />';
+    echo "<br />";
+    echo '</form>';
+    echo "<br />";
+						
+    echo "<a href='createevent.php?group_id=";
+    echo $id;
+    echo "'\>Create Event</a><br />";
+	
 	}
   }
   else if (!isset($_POST['joining']) && isset($_SESSION["username"])){
@@ -60,7 +119,9 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
     echo "<br />";
 	echo '</form>';
   }
-  $stmt->close();
+  else{
+	$stmt->close();
+  }
 }
 
 //print out all the events for this group

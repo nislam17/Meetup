@@ -70,7 +70,7 @@ if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
 
 
 //print out all the user's interests
-if ($stmt = $mysqli->prepare("select interest_name from interested_in natural left outer join about where username = ?")) {
+if ($stmt = $mysqli->prepare("select distinct interest_name from interested_in natural left outer join about where username = ?")) {
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($iname);
