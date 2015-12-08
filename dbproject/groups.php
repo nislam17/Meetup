@@ -30,20 +30,29 @@ if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
 }
 
 //print out all the user's groups
-if ($stmt = $mysqli->prepare("select group_id,group_name from groups join belongs_to b using (group_id) where b.username = ?")) {
+if ($stmt = $mysqli->prepare("select group_id,group_name,authorized from groups join belongs_to b using (group_id) where b.username = ?")) {
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
-  $stmt->bind_result($id,$name);
+  $stmt->bind_result($id,$name,$authorized);
   echo '<table border="2" width="30%">';
-  echo "<tr><td>Group ID</td><td>Group Name</td></tr><br />";
+  echo "<tr><td>Group ID</td><td>Group Name</td><td>Authorized?</td></tr><br />";
   while($stmt->fetch()) {
+	$isauthorized = "no";
+	if ($authorized == 1){
+		$isauthorized = "yes";
+	}
 	$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//$time = htmlspecialchars($time);
-	//echo '<table border="2" width="30%"><tr><td>';
-	echo "\n";
-	echo "<tr><td>$id</td><td><a href='group_page.php?group_id=";
+	//echo "\n";
+	echo "<tr>";
+	echo "<td>$id</td>";
+		
+	echo "<td><a href='group_page.php?group_id=";
 	echo $id;
-	echo "'\>$name</a></td></tr><br />";
+	echo "'\>$name</a></td>";
+	
+	echo "<td>$isauthorized</td>";
+	
+	echo "</tr><br />";
 	//echo "</td></tr></table><br />\n";
   }
   echo "</table><br />\n";

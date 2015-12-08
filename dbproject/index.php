@@ -39,13 +39,13 @@ else {
 
 if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name,rsvp,a.username 
 							  from (events e natural left outer join attend a) join groups using (group_id)
-							  where a.username = ? or (event_id,a.username) in 
+							  where a.username = ? or (not exists (select rsvp from attend where username = ? and event_id = e.event_id) && (event_id,a.username) in 
 								(select event_id,max(username)
 								from attend
 								where username != ?
-                                group by username) or a.username is null
+                                group by username) or a.username is null)
 							  ")) {
-  $stmt->bind_param("ss", $_SESSION["username"], $_SESSION["username"]);								  
+  $stmt->bind_param("sss", $_SESSION["username"], $_SESSION["username"], $_SESSION["username"]);								  
   $stmt->execute();
   $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group,$rsvp,$uname);
   echo '<table border="2" width="30%">';
