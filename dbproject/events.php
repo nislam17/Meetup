@@ -30,7 +30,10 @@ if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
 }
 
 //print out all the user's events
-if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name from (events e join groups using (group_id)) join attend a using (event_id) where a.username = ? order by start_time")) {
+if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
+							  from (events e join groups using (group_id)) join attend a using (event_id) 
+							  where a.username = ? and ((start_time > UTC_TIMESTAMP() - interval '5' hour) or (end_time > UTC_TIMESTAMP() - interval '5' hour))
+							  order by start_time")) {
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group);
