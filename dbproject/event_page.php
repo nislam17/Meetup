@@ -45,6 +45,21 @@ echo "$description <br />";
 echo "From $stime to $etime <br />";
 echo "at $lname ($zip) <br /><br />";
 
+if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id = ? and username = ?")) {
+  $stmt->bind_param("is", $gid, $_SESSION["username"]);
+  $stmt->execute();
+  $stmt->bind_result($authorized);
+  if($stmt->fetch()){
+	if($authorized == 1){
+		echo "You are authorized <br />";
+		echo "<a href='update_event.php?event_id=";
+		echo $id;
+		echo "'\>Update Event Info</a><br /><br />";
+	}
+  }
+  $stmt->close();
+}
+
 if(isset($_POST["rsvp"])){
 	if ($stmt = $mysqli->prepare("insert into attend (event_id, username, rsvp) values (?,?,1)")) {
       $stmt->bind_param("is", $_GET["event_id"], $_SESSION["username"]);

@@ -33,7 +33,6 @@ if(!isset($_SESSION["username"])) {
 }
 else {
   //if the user have entered an event, insert it into database
-  //DOES NOT WORK YET, 1 == 0 USED AS A SAFETY
 
    if(isset($_POST["eventname"]) && isset($_POST["description"]) && isset($_POST["stime"]) && isset($_POST["etime"])) {
 	
@@ -45,9 +44,6 @@ else {
      $stmt->bind_param("ssssisi", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"], $id, $values[0], $values[1]);
       $stmt->execute();
       $stmt->close();
-
-
-	  //$username = htmlspecialchars($_SESSION["username"]);
 
 	  echo "Your event was created. \n";
       //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
@@ -110,7 +106,7 @@ else {
 
 	
 	echo "<br />";
-    echo '<a href="group_page.php?group_id=';
+    echo '<a href="event_page.php?group_id=';
     echo $_GET["group_id"];
     echo '">Go back</a><br />';
 

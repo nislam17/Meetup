@@ -33,8 +33,8 @@ where (interest_name) in (
 	)
 both ?'s represent the current user's username
 
-An authorized user can edit the location and time of an event
-update events (Matthew)
+An authorized user can edit the location and time of an event (Matthew)
+update events
 set lname=?,zip=?,start_time=?,end_time=?
 where (group_id) in (
 	select group_id
