@@ -26,14 +26,54 @@ if ($stmt = $mysqli->prepare("select username from member where username = ?")) 
 
 //check if the user is also the one who is logged in
 if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
-  echo 'These are your events.'; // You may click <a href="post.php">here</a> to post.<br />';
+  echo 'These are your events.<br />'; // You may click <a href="post.php">here</a> to post.<br />';
+}
+
+echo "<br />View Events by:";
+echo '<form action="events.php?username=';
+echo $username;
+echo '" method="POST">';	
+echo '<select name="sorted">;
+  <option value="Upcoming" selected="selected" >Upcoming</option>
+  <option value="Past">Past</option>
+  <option value="Group">Group</option>
+  <option value="Event Name">Event Name</option>
+</select>';
+echo '<input type="submit" value="Update" />';
+echo '</form>';
+echo "<br />";
+
+if(isset($_POST["sorted"]) && $_POST["sorted"] == "Past"){
+	$stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
+							  from (events e join groups using (group_id)) join attend a using (event_id) 
+							  where a.username = ? and (end_time < UTC_TIMESTAMP() - interval '5' hour)
+							  order by start_time");
+	echo $_POST["sorted"];
+}
+else if(isset($_POST["sorted"]) && $_POST["sorted"] == "Group"){
+	$stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
+							  from (events e join groups using (group_id)) join attend a using (event_id) 
+							  where a.username = ? and ((start_time > UTC_TIMESTAMP() - interval '5' hour) or (end_time > UTC_TIMESTAMP() - interval '5' hour))
+							  order by group_id,start_time");
+	echo $_POST["sorted"];
+}
+else if(isset($_POST["sorted"]) && $_POST["sorted"] == "Event Name"){
+	$stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
+							  from (events e join groups using (group_id)) join attend a using (event_id) 
+							  where a.username = ? and ((start_time > UTC_TIMESTAMP() - interval '5' hour) or (end_time > UTC_TIMESTAMP() - interval '5' hour))
+							  order by title");
+	echo $_POST["sorted"];
+}
+else{
+	$stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
+							  from (events e join groups using (group_id)) join attend a using (event_id) 
+							  where a.username = ? and ((start_time > UTC_TIMESTAMP() - interval '5' hour) or (end_time > UTC_TIMESTAMP() - interval '5' hour))
+							  order by start_time");
+	echo "Upcoming";
 }
 
 //print out all the user's events
-if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
-							  from (events e join groups using (group_id)) join attend a using (event_id) 
-							  where a.username = ? and ((start_time > UTC_TIMESTAMP() - interval '5' hour) or (end_time > UTC_TIMESTAMP() - interval '5' hour))
-							  order by start_time")) {
+if ($stmt) {
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group);
