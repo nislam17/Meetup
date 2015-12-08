@@ -7,14 +7,16 @@
 include ("include.php");
 
 //check if the group exists and prints out group, if not redirects back to homepage
-if ($stmt = $mysqli->prepare("select group_id,group_name from groups where group_id = ?")) {
+if ($stmt = $mysqli->prepare("select group_id,group_name,description from groups where group_id = ?")) {
   $stmt->bind_param("i", $_GET["group_id"]);//, $_GET["group_name"]);
   $stmt->execute();
-  $stmt->bind_result($id,$name);
+  $stmt->bind_result($id,$name,$gdesc);
   if($stmt->fetch()) {
 	$name = htmlspecialchars($name);
 	echo "<title>[$id] $name</title>\n";
 	echo "<h1>$name</h1>\n";
+	echo $gdesc;
+	echo "<br /><br />";
   }
   else {
     echo "Group not found. \n";
@@ -68,7 +70,7 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
 								(select event_id,max(username)
 								from attend
 								where username != ?
-                                group by username) or username is null)))
+                                group by username) or username is null))) order by start_time
                               ")) {
   $stmt->bind_param("isss", $_GET["group_id"], $_SESSION["username"], $_SESSION["username"], $_SESSION["username"]);
   $stmt->execute();

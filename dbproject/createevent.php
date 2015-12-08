@@ -64,11 +64,11 @@ else {
     echo '<form action="createevent.php?group_id=';
 	echo $_GET["group_id"];
 	echo '" method="POST">';	
-    echo '<textarea cols="20" rows="1" name="eventname" /></textarea><br />';
+    echo '<input type="text" name="eventname" /></textarea><br />';
     echo "<br />";
 	
 	echo "Description: <br /><br />\n";
-    echo '<textarea cols="40" rows="20" name="description" /></textarea><br />';
+    echo '<input type="text" size="100" name="description" /></textarea><br />';
     echo "<br />";
 
 	echo "Start Time: <br /><br />\n";
@@ -106,7 +106,7 @@ else {
 
 	
 	echo "<br />";
-    echo '<a href="event_page.php?group_id=';
+    echo '<a href="group_page.php?group_id=';
     echo $_GET["group_id"];
     echo '">Go back</a><br />';
 

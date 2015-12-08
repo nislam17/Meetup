@@ -14,7 +14,7 @@ if ($stmt = $mysqli->prepare("select username from member where username = ?")) 
   if($stmt->fetch()) {
 	$username = htmlspecialchars($username);
 	echo "<title>$username's Events</title>\n";
-	echo "$username's groups <br />\n";
+	echo "$username's events <br />\n";
   }
   else {
     echo "Events not found. \n";
@@ -30,7 +30,7 @@ if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
 }
 
 //print out all the user's events
-if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name from (events e join groups using (group_id)) join attend a using (event_id) where a.username = ?")) {
+if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name from (events e join groups using (group_id)) join attend a using (event_id) where a.username = ? order by start_time")) {
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group);

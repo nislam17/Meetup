@@ -81,7 +81,7 @@ else if ($authorized == 1){
     echo '<form action="update_event.php?event_id=';
 	echo $id;
 	echo '" method="POST">';	
-    echo '<input type="text" textarea cols="20" rows="1" name="eventname" value="';
+    echo '<input type="text" name="eventname" value="';
 	echo htmlspecialchars($name);
 	echo '" /></textarea><br />';
     echo "<br />";

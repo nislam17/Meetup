@@ -30,7 +30,7 @@ if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
 }
 
 //print out all the user's groups
-if ($stmt = $mysqli->prepare("select group_id,group_name,authorized from groups join belongs_to b using (group_id) where b.username = ?")) {
+if ($stmt = $mysqli->prepare("select group_id,group_name,authorized from groups join belongs_to b using (group_id) where b.username = ? order by group_name")) {
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($id,$name,$authorized);

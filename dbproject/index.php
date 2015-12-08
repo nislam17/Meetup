@@ -43,7 +43,7 @@ if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,ti
 								(select event_id,max(username)
 								from attend
 								where username != ?
-                                group by username) or a.username is null))
+                                group by username) or a.username is null)) order by start_time
 							  ")) {
   $stmt->bind_param("sss", $_SESSION["username"], $_SESSION["username"], $_SESSION["username"]);								  
   $stmt->execute();
