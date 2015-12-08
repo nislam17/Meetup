@@ -64,11 +64,11 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 //print out all the events for this group
 if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time,rsvp,username
 							  from events e natural left outer join attend
-							  where group_id = ? and (username = ? or (not exists (select rsvp from attend where username = ? and event_id = e.event_id) && (event_id,username) in 
+							  where group_id = ? and (username = ? or (not exists (select rsvp from attend where username = ? and event_id = e.event_id) && ((event_id,username) in 
 								(select event_id,max(username)
 								from attend
 								where username != ?
-                                group by username) or username is null))
+                                group by username) or username is null)))
                               ")) {
   $stmt->bind_param("isss", $_GET["group_id"], $_SESSION["username"], $_SESSION["username"], $_SESSION["username"]);
   $stmt->execute();
