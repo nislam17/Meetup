@@ -14,7 +14,7 @@ if ($stmt = $mysqli->prepare("select username from member where username = ?")) 
   if($stmt->fetch()) {
 	$username = htmlspecialchars($username);
 	echo "<title>$username's groups</title>\n";
-	echo "$username's groups <br />\n";
+	echo "$username's groups <br /><br />";
   }
   else {
     echo "Groups not found. \n";
@@ -30,19 +30,18 @@ if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
 }
 
 //print out all the user's groups
-if ($stmt = $mysqli->prepare("select group_id,group_name,authorized from groups join belongs_to b using (group_id) where b.username = ? order by group_name")) {
+if ($stmt = $mysqli->prepare("select group_id,group_name,authorized from groups join belongs_to b using (group_id) where b.username = ? order by authorized desc,group_name")) {
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($id,$name,$authorized);
   echo '<table border="2" width="30%">';
-  echo "<tr><td>Group ID</td><td>Group Name</td><td>Authorized?</td></tr><br />";
+  echo "<tr><td>Group ID</td><td>Group Name</td><td>Authorized?</td></tr>";
   while($stmt->fetch()) {
 	$isauthorized = "no";
 	if ($authorized == 1){
 		$isauthorized = "yes";
 	}
 	$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";
 		
@@ -52,10 +51,10 @@ if ($stmt = $mysqli->prepare("select group_id,group_name,authorized from groups 
 	
 	echo "<td>$isauthorized</td>";
 	
-	echo "</tr><br />";
-	//echo "</td></tr></table><br />\n";
+	echo "</tr>";
+	//echo "</td></tr></table>";
   }
-  echo "</table><br />\n";
+  echo "</table>";
   $stmt->close();
 }
 

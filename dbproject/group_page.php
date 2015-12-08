@@ -62,8 +62,17 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 	echo "You are in this group <br />";
 	$stmt->close();
 	if($authorized == 1){
-		echo "You are authorized <br />";
+	  echo "You are authorized <br />";
 		
+	  if(isset($_POST["Authorize"])){
+		 echo $_POST["Authorize"];
+		if ($stmt = $mysqli->prepare("update belongs_to set authorized=1 where username=?")) {
+          $stmt->bind_param("s", $_POST["Authorize"]);
+          $stmt->execute();
+          $stmt->close();		 		 
+		  unset($_POST["Authorize"]);
+		}
+	  }
 		
       if(isset($_POST["interest"])) {
         //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
@@ -71,7 +80,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
           $stmt->bind_param("ss", $_POST["interest"], $id);
           $stmt->execute();
           $stmt->close();
-    	  unset($iname);
+    	  unset($_POST["interest"]);
 		  header("refresh: 1; group_page.php?group_id=$id");
         }  
       }
@@ -102,15 +111,14 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
     echo '<input type="submit" value="Add interest" />';
     echo "<br />";
     echo '</form>';
-    echo "<br />";
-						
-    echo "<a href='createevent.php?group_id=";
-    echo $id;
-    echo "'\>Create Event</a><br />";
+    echo "<br />";						
+      echo "<a href='createevent.php?group_id=";
+      echo $id;
+      echo "'\>Create Event</a><br />";
 	
 	}
   }
-  else if (!isset($_POST['joining']) && isset($_SESSION["username"])){
+  else if (isset($_SESSION["username"]) && !isset($_POST['joining'])){
 	echo "You are not in this group.";
 	echo '<form action="group_page.php?group_id=';
 	echo $id;
@@ -194,6 +202,49 @@ else if ($stmt = $mysqli->prepare("select distinct event_id,title,description,st
   $stmt->close();
 
 
+}
+
+echo "Group Members:";
+//print out all the members
+if ($stmt = $mysqli->prepare("select username,authorized 
+							  from belongs_to
+							  where group_id = ? 
+							  order by authorized desc")) {
+  $stmt->bind_param("i", $_GET["group_id"]);//, $_SESSION["username"]);
+  $stmt->execute();
+  $stmt->bind_result($uname,$uauthor);
+  echo '<table border="2" width="30%">';
+  echo "<tr><td>Username</td><td>Interests</td><td>Groups</td><td>Events</td><td>Authorized?</td></tr>";
+  while($stmt->fetch()) {
+	$isauthorized = "no";
+	if ($uauthor == 1){
+			$isauthorized = "yes";
+	}
+	$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
+	//echo "\n";
+	echo "<tr>";
+	echo "<td>$uname</td>";
+		
+	echo "<td><a href='interests.php?username=";
+	echo $uname;
+	echo "'\>Interests</a></td>";
+	
+	echo "<td><a href='groups.php?username=";
+	echo $uname;
+	echo "'\>Groups</a></td>";
+
+	echo "<td><a href='events.php?username=";
+	echo $uname;
+	echo "'\>Events</a></td>";
+	
+	echo "<td>$isauthorized</td>";
+	
+	echo "</tr>";
+	//echo "</td></tr></table>";
+  }
+  echo "</table>";
+  echo "<br />";
+  $stmt->close();
 }
 
 
