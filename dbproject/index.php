@@ -16,6 +16,11 @@ else {
   $username = htmlspecialchars($_SESSION["username"]);
   echo "Welcome $username. You are logged in.<br /><br />\n";
   
+  echo '<a href="interests.php?username=';
+  echo htmlspecialchars($_SESSION["username"]);
+  echo '">My interests</a><br />';
+
+  
   echo '<a href="groups.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
   echo '">My groups</a><br />';
