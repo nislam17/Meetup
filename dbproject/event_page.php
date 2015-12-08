@@ -7,10 +7,10 @@
 include ("include.php");
 
 //check if the group exists and prints out group, if not redirects back to homepage
-if ($stmt = $mysqli->prepare("select * from events where event_id = ?")) {
+if ($stmt = $mysqli->prepare("select * from events join location using (lname,zip) where event_id = ?")) {
   $stmt->bind_param("i", $_GET["event_id"]);//, $_GET["group_name"]);
   $stmt->execute();
-  $stmt->bind_result($id,$name,$description,$stime,$etime,$gid,$lname,$zip);
+  $stmt->bind_result($lname,$zip,$id,$name,$description,$stime,$etime,$gid,$st,$city,$ldesc,$lat,$long);
   if($stmt->fetch()) {
 	$name = htmlspecialchars($name);
 	echo "<title>[$id] $name</title>\n";
@@ -43,7 +43,7 @@ if ($stmt = $mysqli->prepare("select group_name from groups where group_id = ?")
 
 echo "$description <br />";
 echo "From $stime to $etime <br />";
-echo "at $lname ($zip) <br /><br />";
+echo "at $lname <br /> $st $zip ($lat,$long) <br />$ldesc <br /><br />";
 
 if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id = ? and username = ?")) {
   $stmt->bind_param("is", $gid, $_SESSION["username"]);
@@ -93,7 +93,7 @@ if ($stmt = $mysqli->prepare("select rsvp from attend join events using (event_i
   $stmt->close();
 }
 
-echo "<br />Potential Time Conflicts: <br />";
+echo "<br />Potential Time Conflicts:";
 //print out all the events for this group
 if ($stmt = $mysqli->prepare("select event_id,title,start_time,end_time
 								from (events e natural join attend)

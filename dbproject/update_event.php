@@ -65,10 +65,10 @@ else if ($authorized == 1){
 	  echo "The event was updated. \n";
       //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
       //header("refresh: 3; view.php?username=$username");
-	  echo "You will be returned to the event page in 3 seconds or click";		
+	  echo "You will be returned to the event page in 3 seconds or click ";		
 	  echo "<a href='event_page.php?event_id=";
 	  echo $id;
-	  echo "'\> here</a>";
+	  echo "'\>here</a>";
 
       header("refresh: 3; event_page.php?event_id=$id");
 
