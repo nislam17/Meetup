@@ -54,10 +54,23 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 		echo "You are authorized <br />";
 		echo "<a href='update_event.php?event_id=";
 		echo $id;
-		echo "'\>Update Event Info</a><br /><br />";
+		echo "'\>Update Event Info</a><br />";
+		echo '<form action="event_page.php?event_id=';
+		echo $id; 
+		echo '"method="POST">';
+		echo '<button name="delEvent" value=1>Delete Event</button>';
+		echo "<br /><br />";
+		echo '</form>';
 	}
   }
   $stmt->close();
+}
+if(isset($_POST["delEvent"])) {
+	if($stmt = $mysqli->prepare("delete from events where event_id=?")) {
+	$stmt->bind_param("i", $_GET["event_id"]); 
+	$stmt->execute(); 
+	$stmt->close();
+}
 }
 
 if(isset($_POST["rsvp"])){

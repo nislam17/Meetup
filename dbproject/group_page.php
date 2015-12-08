@@ -98,7 +98,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
       $stmt->close();
 	  
       }
-	  
+    	  
     echo '<input type="submit" value="Add interest" />';
     echo "<br />";
     echo '</form>';

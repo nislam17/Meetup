@@ -98,7 +98,30 @@ if ($stmt) {
 	echo "</tr>";
   }
   echo "</table><br />\n";
-  $stmt->close();
+$stmt->close();
+}
+
+echo "Events in your area"; 
+if ($stmt = $mysqli->prepare("select event_id, title from events where zip = (select zip from member where username = ?) and event_id not in (select event_id from attend where username = ? and rsvp='No')")) {
+//if ($stmt = $mysqli->prepare("select event_id, title from events")) {
+$stmt->bind_param("ss", $_SESSION["username"], $_SESSION["username"]); 
+$stmt->execute(); 
+$stmt->bind_result($eid, $name); 
+echo '<table border = "2" width = 30%">'; 
+echo "<tr><td> Event ID </td><td> Event Name </td></tr>"; 
+while ($stmt->fetch()) {
+ //$name = n12br(htmlspecialchars($name)); 
+ echo "<tr>"; 
+ echo "<td> $eid</td>"; 
+ echo "<td><a href='event_page.php?event_id=";
+ echo $eid; 
+ echo "'\>$name</a></td>";
+ echo "</tr>";
+
+}
+echo "</table>";
+echo "<br />";
+$stmt->close();
 }
 
 echo '<a href="index.php">Go back</a><br /><br />';

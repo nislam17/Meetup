@@ -74,8 +74,8 @@ if ($stmt = $mysqli->prepare("select distinct interest_name from interested_in n
   $stmt->bind_param("s", $_GET["username"]);
   $stmt->execute();
   $stmt->bind_result($iname);
-  echo '<table border="2" width="10%">';
-  echo "<tr><td>Interest</td></tr><br />";
+  echo '<table border="2" width="20%">';
+  echo "<tr><td>Your Interests</td></tr><br />";
   while($stmt->fetch()) {
 	  
 	echo "<tr>";
@@ -90,9 +90,26 @@ if ($stmt = $mysqli->prepare("select distinct interest_name from interested_in n
   $stmt->close();
 }
 
-echo '<a href="index.php">Go back</a><br /><br />';
-//echo "\n";
 
+//echo "\n";
+echo "Interests that have not yet been added in groups"; 
+if($stmt = $mysqli->prepare("select interest_name from interest where interest_name not in (select interest_name from about)")) {
+ $stmt->execute(); 
+ $stmt->bind_result($iname); 
+ echo '<table border="2" width ="10%">';
+ echo "<tr><td> Interests</td></tr><br />";
+ while($stmt->fetch()) {
+ 	echo "<tr>"; 
+	echo "<td><a href='interest_age.php?interest_name=";
+	echo $iname;
+	echo "'\>$iname</a></td>";
+	echo "</tr>";
+	}
+  echo "</table><br />\n";
+  $stmt->close();
+}
+
+echo '<a href="index.php">Go back </a><br /><br />';
 $mysqli->close();
 ?>
 
