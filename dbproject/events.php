@@ -102,7 +102,7 @@ $stmt->close();
 }
 
 echo "Events in your area"; 
-if ($stmt = $mysqli->prepare("select event_id, title from events where zip = (select zip from member where username = ?) and event_id not in (select event_id from attend where username = ? and rsvp='No')")) {
+if ($stmt = $mysqli->prepare("select event_id, title from events where zip = (select zipcode from member where username = ?) and event_id not in (select event_id from attend where username = ?)")) {
 //if ($stmt = $mysqli->prepare("select event_id, title from events")) {
 $stmt->bind_param("ss", $_SESSION["username"], $_SESSION["username"]); 
 $stmt->execute(); 
