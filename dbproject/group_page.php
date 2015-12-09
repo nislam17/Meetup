@@ -65,7 +65,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 	  echo "You are authorized <br />";
 		
 	  if(isset($_POST["Authorize"])){
-		 echo $_POST["Authorize"];
+		 //echo $_POST["Authorize"];
 		if ($stmt = $mysqli->prepare("update belongs_to set authorized=1 where username=?")) {
           $stmt->bind_param("s", $_POST["Authorize"]);
           $stmt->execute();
@@ -236,8 +236,23 @@ if ($stmt = $mysqli->prepare("select username,authorized
 	echo "<td><a href='events.php?username=";
 	echo $uname;
 	echo "'\>Events</a></td>";
+	//echo $_GET["group_id"];
+	if ($authorized == 1 && $isauthorized == "no"){
+		echo "<td>";
+		echo '<form action="group_page.php?group_id=';
+		echo $_GET["group_id"];
+		echo '" method="POST">';
+		echo '<button name="Authorize" value=';
+		echo $uname;
+		echo '>Authorize</button>';
+		echo "<br /><br />";
+		echo '</form>';
+		echo "</td>";
+	}
 	
-	echo "<td>$isauthorized</td>";
+	else{
+		echo "<td>$isauthorized</td>";
+	}
 	
 	echo "</tr>";
 	//echo "</td></tr></table>";
@@ -247,6 +262,7 @@ if ($stmt = $mysqli->prepare("select username,authorized
   $stmt->close();
 }
 
+//echo $_GET["group_id"];
 
 echo "You may also like these groups:";
 //print out all the groups with similar interests
