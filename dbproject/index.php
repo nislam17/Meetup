@@ -18,19 +18,19 @@ else {
   
   echo '<a href="interests.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
-  echo '">My interests</a><br />';
+  echo '">My Interests</a><br />';
 
   
   echo '<a href="groups.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
-  echo '">My groups</a><br />';
+  echo '">My Groups</a><br />';
 
   
   echo '<a href="events.php?username=';
   echo htmlspecialchars($_SESSION["username"]);
   echo '">My Upcoming Events</a><br />';
   
-  echo '<a href="creategroup.php">Create a group</a><br />';
+  echo '<a href="creategroup.php">Create a Group</a><br />';
   
  // echo '<a href="logout.php">Logout</a>';
   echo "\n";
@@ -50,7 +50,7 @@ if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,ti
 										(select event_id,max(username)
 										from attend
 										where username != ?
-										group by username) or a.username is null))) order by start_time
+										group by event_id) or a.username is null))) order by start_time
 							  ")) {
   $stmt->bind_param("sss", $_SESSION["username"], $_SESSION["username"], $_SESSION["username"]);								  
   $stmt->execute();
@@ -88,6 +88,7 @@ else if ($stmt = $mysqli->prepare("select distinct event_id,title,e.description,
 								   from events e join groups using (group_id)
 								   where (start_time <= (UTC_TIMESTAMP() - interval '5' hour + interval '3' day)) and 
 										((start_time > UTC_TIMESTAMP() - interval '5' hour) or (end_time > UTC_TIMESTAMP() - interval '5' hour))
+										order by start_time
 									")) {
 
   $stmt->execute();

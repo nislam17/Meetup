@@ -131,7 +131,7 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
 								(select event_id,max(username)
 								from attend
 								where username != ?
-                                group by username) or username is null))) order by start_time
+                                group by event_id) or username is null))) order by start_time
                               ")) {
   $stmt->bind_param("isss", $_GET["group_id"], $_SESSION["username"], $_SESSION["username"], $_SESSION["username"]);
   $stmt->execute();
@@ -163,6 +163,39 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
   echo "</table><br />\n";
   $stmt->close();
 }
+
+echo "You may also like these groups:";
+//print out all the groups with similar interests
+if ($stmt = $mysqli->prepare("select distinct group_id,group_name 
+							  from groups natural join about
+							  where ((interest_name) in 
+								(select interest_name from groups natural join about where group_id = ?))
+								and ((group_id) not in
+								(select group_id from belongs_to where username = ? or group_id = ?))
+							  order by group_name")) {
+  $stmt->bind_param("isi", $_GET["group_id"], $_SESSION["username"], $_GET["group_id"]);
+  $stmt->execute();
+  $stmt->bind_result($gid,$name);
+  echo '<table border="2" width="30%">';
+  echo "<tr><td>Group ID</td><td>Group Name</td></tr>";
+  while($stmt->fetch()) {
+	$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
+	//echo "\n";
+	echo "<tr>";
+	echo "<td>$gid</td>";
+		
+	echo "<td><a href='group_page.php?group_id=";
+	echo $gid;
+	echo "'\>$name</a></td>";
+		
+	echo "</tr>";
+	//echo "</td></tr></table>";
+  }
+  echo "</table>";
+  $stmt->close();
+}
+
+
 
 if(isset($_SESSION["username"])){
   echo '<a href="groups.php?username=';
