@@ -105,7 +105,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
       echo '" method="POST">';	
  
       echo '<select name="interest">';
-      if ($stmt = $mysqli->prepare("select * from interest where (interest_name) not in (select interest_name from about where group_id = ?)")){
+      if ($stmt = $mysqli->prepare("select interest_name from interest where (interest_name) not in (select interest_name from about where group_id = ?)")){
 	    $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->bind_result($iname);
