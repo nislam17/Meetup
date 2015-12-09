@@ -106,7 +106,7 @@ select group_id,group_name,authorized
 from groups join belongs_to b using (group_id) 
 where b.username = ? 
 order by authorized desc,group_name
-Displays all od the groups that the user is in
+Displays all of the groups that the user is in
 
 
 	
