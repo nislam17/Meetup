@@ -83,9 +83,6 @@ if ($stmt = $mysqli->prepare("select rsvp from attend join events using (event_i
 	//echo "You are in this event's group <br />";
 	if($rsvp == 1){
 		echo "You are RSVP'd for this event <br />";
-		//echo "<a href='createevent.php?group_id=";
-		//echo $id;
-		//echo "'\>Create Event</a>";
 	}
   }
   else if (!isset($_POST['rsvp']) && isset($_SESSION["username"])){
