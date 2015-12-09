@@ -44,7 +44,7 @@ if(isset($_SESSION["username"]) && $_SESSION["username"] == $_GET["username"]) {
   echo '" method="POST">';	
  
   echo '<select name="interest">';
-  if ($stmt = $mysqli->prepare("select * from interest where (interest_name) not in (select interest_name from interested_in where username = ?)")){
+  if ($stmt = $mysqli->prepare("select interest_name from interest where (interest_name) not in (select interest_name from interested_in where username = ?)")){
 	$stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->bind_result($iname);

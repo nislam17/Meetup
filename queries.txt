@@ -49,10 +49,10 @@ Allows the user to see the events that are in the same area as him/her (zipcode)
 group_page.php
 delete from attend where event_id=?
 delete from events where event_id=?
-deletes an event (this is from a redirect from event_page.php)
+Deletes an event (this is from a redirect from event_page.php)
 
 select interest_name from groups natural join about where group_id = ?
-displays the group's interests
+Displays the group's interests
 
 insert into belongs_to (group_id, username, authorized) values (?,?,0)
 Allows the user to join the group (unauthorized)
@@ -80,7 +80,7 @@ where group_id = ? and
 						group by event_id) or 
 					username is null))) 
 	order by start_time
-combines several tables to remove duplicates and display all of the events in the group, along whether or not the user RSVP's to each one
+Combines several tables to remove duplicates and display all of the events in the group, along whether or not the user RSVP's to each one
 
 select username,authorized 
 from belongs_to
@@ -108,12 +108,41 @@ where b.username = ?
 order by authorized desc,group_name
 Displays all of the groups that the user is in
 
+index.php
+select event_id,title,e.description,start_time,end_time,group_id,group_name,rsvp,a.username 
+from (events e natural left outer join attend a) join groups using (group_id)
+where ((start_time <= (UTC_TIMESTAMP() - interval '5' hour + interval '3' day)) and 
+((start_time > UTC_TIMESTAMP() - interval '5' hour) or (end_time > UTC_TIMESTAMP() - interval '5' hour))) and
+(a.username = ? or (not exists (select rsvp from attend where username = ? and event_id = e.event_id) && ((event_id,a.username) in 
+	(select event_id,max(username)
+	from attend
+	where username != ?
+	group by event_id) or a.username is null))) order by start_time
+Displays all the events of the user and it's details during a span of three days	
 
+interest_page.php 
+select group_id,group_name from groups natural join about where interest_name = ? group by group_name
+Displays all the groups that have the specified interest 
+
+interests.php
+insert into interested_in (interest_name,username) values (?,?)
+Updates the interested_in table with the user and his/her interest 
+
+interests.php
+select interest_name from interest where (interest_name) not in (select interest_name from interested_in where username = ?)
+Returns interests that the user is not interested in 
+
+interests.php
+select distinct interest_name from interested_in natural left outer join about where username = ?
+Displays the user's interests 
 	
-	
-	
-	
-	
-	
-	
+interests.php
+select interest_name from interest where interest_name not in (select interest_name from about)	
+Displays interests that don't belong to any groups as of yet 
+
+update_event.php
+update events set title=?,description=?,start_time=?,end_time=?,lname=?,zip=? where event_id = ?
+Updates the details of an event
+
+
 	
