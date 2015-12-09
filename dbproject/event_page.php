@@ -58,7 +58,9 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 		echo '<form action="event_page.php?event_id=';
 		echo $id; 
 		echo '"method="POST">';
-		echo '<button name="delEvent" value=1>Delete Event</button>';
+		echo '<button name="delEvent" value=';
+		echo $id;
+		echo '>Delete Event</button>';
 		echo "<br /><br />";
 		echo '</form>';
 	}
@@ -66,11 +68,16 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
   $stmt->close();
 }
 if(isset($_POST["delEvent"])) {
-	if($stmt = $mysqli->prepare("delete from events where event_id=?")) {
+	if($stmt = $mysqli->prepare("delete from attend where event_id=?")) {
 	$stmt->bind_param("i", $_GET["event_id"]); 
 	$stmt->execute(); 
 	$stmt->close();
 }
+	if($stmt = $mysqli->prepare("delete from events where event_id=?")) {
+	$stmt->bind_param("i", $_GET["event_id"]);
+	$stmt->execute();
+	$stmt->close();
+	}	
 }
 
 if(isset($_POST["rsvp"])){
