@@ -38,21 +38,22 @@ the last ? represents the event's event_id
 NOTE: Application code guarantees that the user is authorized in the event's group
 
 A member can find events based on their own location (Nazifa)
-select event_id 
+select event_id, title 
 from events 
-where zip = ? 
+where zip = (select zipcode from member where username=?) and event_id not in 
+	(select event_id from attend where username = ?)
 
-?: member's zipcode  
+both ?'s are the username values 
 
 A member can search up existing interests that don't belong in a group yet (Nazifa) 
 select interest_name 
-from interest right outer join about 
-where group_id = NULL 
+from interest 
+where interest_name not in 
+	(select interest_name 
+	from about)
 
 An authorized user can delete an existing group (Nazifa) 
-delete from events 
-where (group_id) in (
-      select group_id
-      from belongs_to
-      where username = ? and authorized = 1 
-      )     
+delete from attend where event_id=? 
+delete from events where event_id=? 
+
+both ?'s are the event_id's
