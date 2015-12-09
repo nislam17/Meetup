@@ -26,6 +26,21 @@ if ($stmt = $mysqli->prepare("select group_id,group_name,description from groups
   $stmt->close();
 }
 
+if(isset($_POST["delEvent"])) {
+	//echo "trying to delete";
+	if($stmt = $mysqli->prepare("delete from attend where event_id=?")) {
+	$stmt->bind_param("i", $_POST["delEvent"]); 
+	$stmt->execute(); 
+	$stmt->close();
+}
+	if($stmt = $mysqli->prepare("delete from events where event_id=?")) {
+	$stmt->bind_param("i", $_POST["delEvent"]);
+	$stmt->execute();
+	$stmt->close();
+	}	
+	unset($_POST["delEvent"]);
+}
+
 if ($stmt = $mysqli->prepare("select interest_name from groups natural join about where group_id = ?")) {
   $stmt->bind_param("i", $_GET["group_id"]);
   $stmt->execute();
