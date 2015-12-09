@@ -32,7 +32,7 @@ if(isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select authorized f
   else{
 	echo "You are not authorized to edit this event. ";
 	echo "You will be returned to the homepage in 3 seconds or click <a href=\"index.php\">here</a>.\n";
-	//header("refresh: 3; index.php");
+	header("refresh: 3; index.php");
   }
   $stmt->close();
 }
@@ -51,7 +51,6 @@ else if ($authorized == 1){
 
    if(isset($_POST["eventname"]) && isset($_POST["description"]) && isset($_POST["stime"]) && isset($_POST["etime"])) {
 	
-    //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
     if ($stmt = $mysqli->prepare("update events set title=?,description=?,start_time=?,end_time=?,lname=?,zip=? where event_id = ?")) {
 	
 	  $values = explode('|',$_POST["location"]);
@@ -59,12 +58,7 @@ else if ($authorized == 1){
       $stmt->execute();
       $stmt->close();
 
-
-	  //$username = htmlspecialchars($_SESSION["username"]);
-
 	  echo "The event was updated. \n";
-      //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
-      //header("refresh: 3; view.php?username=$username");
 	  echo "You will be returned to the event page in 3 seconds or click ";		
 	  echo "<a href='event_page.php?event_id=";
 	  echo $id;

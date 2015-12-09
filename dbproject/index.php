@@ -9,8 +9,6 @@ include ("include.php");
 
 if(!isset($_SESSION["username"])) {
   echo "Welcome to MeetUp, you are not logged in. <br /><br >\n";
-  //echo 'You may view the meetups listed below or select an interest to see the groups that share that interest. <a href="login.php">Login</a> or <a href="register.php">register</a>.';
-  echo "\n";
 }
 else {
   $username = htmlspecialchars($_SESSION["username"]);
@@ -32,8 +30,6 @@ else {
   
   echo '<a href="creategroup.php">Create a Group</a><br />';
   
- // echo '<a href="logout.php">Logout</a>';
-  echo "\n";
 }
 if(!isset($_SESSION["username"])) {
   echo '<a href="login.php">Login</a> or <a href="register.php">register</a><br /><br />.';
@@ -62,9 +58,6 @@ if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,ti
 	if (isset($rsvp) && $uname == $_SESSION["username"] && $rsvp == 1){
 		$isRSVP = "yes";
 	}
-	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//$time = htmlspecialchars($time);
-	//echo '<table border="2" width="30%"><tr><td>';
 	echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";
@@ -97,9 +90,6 @@ else if ($stmt = $mysqli->prepare("select distinct event_id,title,e.description,
   echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td><td>RSVP'd?</td></tr><br />";
   while($stmt->fetch()) {
 	$isRSVP = "no";
-	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//$time = htmlspecialchars($time);
-	//echo '<table border="2" width="30%"><tr><td>';
 	echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";

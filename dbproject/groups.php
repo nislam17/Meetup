@@ -52,14 +52,12 @@ if ($stmt = $mysqli->prepare("select group_id,group_name,authorized from groups 
 	echo "<td>$isauthorized</td>";
 	
 	echo "</tr>";
-	//echo "</td></tr></table>";
   }
   echo "</table>";
   $stmt->close();
 }
 
 echo '<a href="index.php">Go back</a><br /><br />';
-//echo "\n";
 
 $mysqli->close();
 ?>

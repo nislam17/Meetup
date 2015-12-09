@@ -14,7 +14,6 @@ if ($stmt = $mysqli->prepare("select * from events join location using (lname,zi
   if($stmt->fetch()) {
 	$name = htmlspecialchars($name);
 	echo "<title>[$id] $name</title>\n";
-	//echo "<h1>$name</h1>\n";
   }
   else {
     echo "Event not found. \n";
@@ -80,7 +79,6 @@ if ($stmt = $mysqli->prepare("select rsvp from attend join events using (event_i
   $stmt->execute();
   $stmt->bind_result($rsvp);
   if($stmt->fetch()){
-	//echo "You are in this event's group <br />";
 	if($rsvp == 1){
 		echo "You are RSVP'd for this event <br />";
 	}
@@ -112,9 +110,6 @@ if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,ti
   echo '<table border="2" width="30%">';
   echo "<tr><td>ID</td><td>Event</td><td>Start Time</td><td>End Time</td></tr><br />";
   while($stmt->fetch()) {
-	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//$time = htmlspecialchars($time);
-	//echo '<table border="2" width="30%"><tr><td>';
 	echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";
@@ -123,9 +118,7 @@ if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,ti
 	echo "'\>$title</a></td>";
 	echo "<td>$stime</td>";
 	echo "<td>$etime</td>";
-	//echo $id;
 	echo "</tr>";
-	//echo "</td></tr></table><br />\n";
   }
   echo "</table><br />\n";
   $stmt->close();

@@ -37,8 +37,8 @@ if ($stmt = $mysqli->prepare("select group_id,group_name from groups natural joi
   echo '<table border="2" width="30%">';
   echo "<tr><td>ID</td><td>Group</td></tr><br />";
   while($stmt->fetch()) {
-//	echo "\n";
-	echo "<tr>";
+
+    echo "<tr>";
 	
 	echo "<td>$gid</td>";
 	echo "<td><a href='group_page.php?group_id=";
@@ -46,7 +46,6 @@ if ($stmt = $mysqli->prepare("select group_id,group_name from groups natural joi
 	echo "'\>$gname</a></td>";
 	
 	echo "</tr>";
-	//echo "</td></tr></table><br />\n";
   }
   echo "</table><br />\n";
   $stmt->close();

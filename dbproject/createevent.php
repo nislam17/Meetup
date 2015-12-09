@@ -36,9 +36,6 @@ else {
 
    if(isset($_POST["eventname"]) && isset($_POST["description"]) && isset($_POST["stime"]) && isset($_POST["etime"])) {
 	
-	//echo $_POST["location"];
-
-    //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
     if ($stmt = $mysqli->prepare("insert into events (title, description, start_time, end_time, group_id, lname, zip ) values (?,?,?,?,?,?,?)")) {
      $values = explode('|',$_POST["location"]);
      $stmt->bind_param("ssssisi", $_POST["eventname"], $_POST["description"], $_POST["stime"], $_POST["etime"], $id, $values[0], $values[1]);
@@ -46,8 +43,6 @@ else {
       $stmt->close();
 
 	  echo "Your event was created. \n";
-      //echo "You will be returned to your homepage in 3 seconds or click <a href=\"view.php?username=$username\">here</a>.";
-      //header("refresh: 3; view.php?username=$username");
 	  echo "You will be returned to the group page in 3 seconds or click";		
 	  echo "<a href='group_page.php?group_id=";
 	  echo $_GET["group_id"];

@@ -28,7 +28,6 @@ else {
 	  $stmt->execute();
 	  $stmt->bind_result($id);
 	  $stmt->fetch();
-	  //echo $id;
 	  $stmt->close();
 	  
 	  $stmt = $mysqli->prepare("insert into belongs_to (group_id, username, authorized) values (?,?,1)");
@@ -36,7 +35,6 @@ else {
 	  $stmt->execute();
       $stmt->close();
 
-	  //$username = htmlspecialchars($_SESSION["username"]);
 	  echo "Your group was created. \n";
 	  echo "You will be returned to your homepage in 3 seconds or click <a href=\"index.php\">here</a>.";
       header("refresh: 3; index.php");

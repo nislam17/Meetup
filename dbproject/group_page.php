@@ -80,7 +80,6 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 	  echo "You are authorized <br />";
 		
 	  if(isset($_POST["Authorize"])){
-		 //echo $_POST["Authorize"];
 		if ($stmt = $mysqli->prepare("update belongs_to set authorized=1 where username=?")) {
           $stmt->bind_param("s", $_POST["Authorize"]);
           $stmt->execute();
@@ -90,7 +89,6 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 	  }
 		
       if(isset($_POST["interest"])) {
-        //insert into database, note that message_id is auto_increment and time is set to current_timestamp by default
         if ($stmt = $mysqli->prepare("insert into about (interest_name,group_id) values (?,?)")) {
           $stmt->bind_param("ss", $_POST["interest"], $id);
           $stmt->execute();
@@ -166,9 +164,6 @@ if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,ti
 	if (isset($rsvp) && $uname == $_SESSION["username"] && $rsvp == 1){
 		$isRSVP = "yes";
 	}
-	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//$time = htmlspecialchars($time);
-	//echo '<table border="2" width="30%"><tr><td>';
 	echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";
@@ -179,9 +174,7 @@ if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,ti
 	echo "<td>$stime</td>";
 	echo "<td>$etime</td>";
 	echo "<td>$isRSVP</td>";
-	//echo $id;
 	echo "</tr>";
-	//echo "</td></tr></table><br />\n";
   }
   echo "</table><br />\n";
   $stmt->close();
@@ -199,9 +192,6 @@ else if ($stmt = $mysqli->prepare("select distinct event_id,title,description,st
   echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td></tr><br />";
   while($stmt->fetch()) {
 	$isRSVP = "no";
-	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//$time = htmlspecialchars($time);
-	//echo '<table border="2" width="30%"><tr><td>';
 	echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";
@@ -236,7 +226,6 @@ if ($stmt = $mysqli->prepare("select username,authorized
 			$isauthorized = "yes";
 	}
 	$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//echo "\n";
 	echo "<tr>";
 	echo "<td>$uname</td>";
 		
@@ -251,7 +240,6 @@ if ($stmt = $mysqli->prepare("select username,authorized
 	echo "<td><a href='events.php?username=";
 	echo $uname;
 	echo "'\>Events</a></td>";
-	//echo $_GET["group_id"];
 	if ($authorized == 1 && $isauthorized == "no"){
 		echo "<td>";
 		echo '<form action="group_page.php?group_id=';
@@ -270,14 +258,11 @@ if ($stmt = $mysqli->prepare("select username,authorized
 	}
 	
 	echo "</tr>";
-	//echo "</td></tr></table>";
   }
   echo "</table>";
   echo "<br />";
   $stmt->close();
 }
-
-//echo $_GET["group_id"];
 
 echo "You may also like these groups:";
 //print out all the groups with similar interests
@@ -295,7 +280,6 @@ if ($stmt = $mysqli->prepare("select distinct group_id,group_name
   echo "<tr><td>Group ID</td><td>Group Name</td></tr>";
   while($stmt->fetch()) {
 	$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//echo "\n";
 	echo "<tr>";
 	echo "<td>$gid</td>";
 		
@@ -304,7 +288,6 @@ if ($stmt = $mysqli->prepare("select distinct group_id,group_name
 	echo "'\>$name</a></td>";
 		
 	echo "</tr>";
-	//echo "</td></tr></table>";
   }
   echo "</table>";
   echo "<br />";

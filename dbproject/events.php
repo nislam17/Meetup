@@ -80,9 +80,6 @@ if ($stmt) {
   echo '<table border="2" width="30%">';
   echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td></tr><br />";
   while($stmt->fetch()) {
-	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
-	//$time = htmlspecialchars($time);
-	//echo '<table border="2" width="30%"><tr><td>';
 	echo "\n";
 	echo "<tr>";
 	echo "<td>$id</td>";
@@ -105,14 +102,12 @@ echo "Events in your area";
 if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
 							  from (events e join groups using (group_id)) join attend a using (event_id) 
 							  where zip = (select zipcode from member where username = ?) and event_id not in (select event_id from attend where username = ?)")) {
-//if ($stmt = $mysqli->prepare("select event_id, title from events")) {
 $stmt->bind_param("ss", $_SESSION["username"], $_SESSION["username"]); 
 $stmt->execute(); 
   $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group);
 echo '<table border = "2" width = 30%">'; 
   echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td></tr><br />";
 while ($stmt->fetch()) {
- //$name = n12br(htmlspecialchars($name)); 
 	echo "<tr>";
 	echo "<td>$id</td>";
 	echo "<td><a href='event_page.php?event_id=";
@@ -133,7 +128,6 @@ $stmt->close();
 }
 
 echo '<a href="index.php">Go back</a><br /><br />';
-//echo "\n";
 
 $mysqli->close();
 ?>
