@@ -125,7 +125,7 @@ if ($stmt = $mysqli->prepare("select authorized from belongs_to where group_id =
 }
 
 //print out all the events for this group
-if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time,rsvp,username
+if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,title,description,start_time,end_time,rsvp,username
 							  from events e natural left outer join attend
 							  where group_id = ? and (username = ? or (not exists (select rsvp from attend where username = ? and event_id = e.event_id) && ((event_id,username) in 
 								(select event_id,max(username)
@@ -164,6 +164,39 @@ if ($stmt = $mysqli->prepare("select event_id,title,description,start_time,end_t
   $stmt->close();
 }
 
+else if ($stmt = $mysqli->prepare("select distinct event_id,title,description,start_time,end_time
+								   from events e natural left outer join attend
+								   where group_id = ?
+								   order by start_time
+								")) {
+  $stmt->bind_param("i", $_GET["group_id"]);
+  $stmt->execute();
+  $stmt->bind_result($id,$title,$description,$stime,$etime);
+  echo '<table border="2" width="30%">';
+  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td></tr><br />";
+  while($stmt->fetch()) {
+	$isRSVP = "no";
+	//$name = nl2br(htmlspecialchars($name)); //nl2br function replaces \n and \r with <br />
+	//$time = htmlspecialchars($time);
+	//echo '<table border="2" width="30%"><tr><td>';
+	echo "\n";
+	echo "<tr>";
+	echo "<td>$id</td>";
+	echo "<td><a href='event_page.php?event_id=";
+	echo $id;
+	echo "'\>$title</a></td>";
+	echo "<td>$description</td>";
+	echo "<td>$stime</td>";
+	echo "<td>$etime</td>";
+	echo "</tr>";
+  }
+  echo "</table><br />\n";
+  $stmt->close();
+
+
+}
+
+
 echo "You may also like these groups:";
 //print out all the groups with similar interests
 if ($stmt = $mysqli->prepare("select distinct group_id,group_name 
@@ -192,6 +225,7 @@ if ($stmt = $mysqli->prepare("select distinct group_id,group_name
 	//echo "</td></tr></table>";
   }
   echo "</table>";
+  echo "<br />";
   $stmt->close();
 }
 

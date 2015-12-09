@@ -18,32 +18,24 @@ where username = ? and (event_id,username) not in (
 
 ?: current user's username, selected event's start_time, selected event's end_time, and the selected event's event_id
 
-A member will be able to see groups that have the same interests as groups he/she is already in (Matthew)
-select distinct group_id,group_name
+A member will be able to see groups that have the same interests as the group page he/she is on, excluding groups the user is already in (Matthew)
+select distinct group_id,group_name 
 from groups natural join about
-where (interest_name) in (
-	select interest_name
-	from belongs_to natural join about
-	where username = ?
-    )
-    and (group_id) not in (
-	select group_id 
-	from belongs_to
-	where username = ?
-	)
-both ?'s represent the current user's username
+where ((interest_name) in 
+	(select interest_name from groups natural join about where group_id = ?))
+	and ((group_id) not in
+	(select group_id from belongs_to where username = ? or group_id = ?))
+	order by group_name
+?: current user's username, and the group_id of the group he/she is viewing, respectively
 
-An authorized user can edit the location and time of an event (Matthew)
-update events
-set lname=?,zip=?,start_time=?,end_time=?
-where (group_id) in (
-	select group_id
-	from belongs_to
-	where username = ? and authorized = 1
-	)
+An authorized user can edit an event (Matthew)
+update events 
+set title=?,description=?,start_time=?,end_time=?,lname=?,zip=? 
+where event_id = ?
 
 first set of ?'s represent the new values for the respective field
-the last ? represents the current user's username
+the last ? represents the event's event_id
+NOTE: Application code guarantees that the user is authorized in the event's group
 
 A member can find events based on their own location (Nazifa)
 select event_id 

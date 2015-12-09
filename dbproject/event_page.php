@@ -93,9 +93,8 @@ if ($stmt = $mysqli->prepare("select rsvp from attend join events using (event_i
   $stmt->close();
 }
 
-echo "<br />Potential Time Conflicts:";
 //print out all the events for this group
-if ($stmt = $mysqli->prepare("select event_id,title,start_time,end_time
+if (isset($_SESSION["username"]) && $stmt = $mysqli->prepare("select event_id,title,start_time,end_time
 								from (events e natural join attend)
 								where username = ? and (event_id,username) not in (
 									select event_id,username
@@ -105,6 +104,7 @@ if ($stmt = $mysqli->prepare("select event_id,title,start_time,end_time
   $stmt->bind_param("sssi", $_SESSION["username"], $stime, $etime, $_GET["event_id"]);
   $stmt->execute();
   $stmt->bind_result($id,$title,$stime,$etime);
+  echo "<br />Potential Time Conflicts:";
   echo '<table border="2" width="30%">';
   echo "<tr><td>ID</td><td>Event</td><td>Start Time</td><td>End Time</td></tr><br />";
   while($stmt->fetch()) {
