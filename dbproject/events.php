@@ -102,21 +102,29 @@ $stmt->close();
 }
 
 echo "Events in your area"; 
-if ($stmt = $mysqli->prepare("select event_id, title from events where zip = (select zipcode from member where username = ?) and event_id not in (select event_id from attend where username = ?)")) {
+if ($stmt = $mysqli->prepare("select event_id,title,e.description,start_time,end_time,group_id,group_name 
+							  from (events e join groups using (group_id)) join attend a using (event_id) 
+							  where zip = (select zipcode from member where username = ?) and event_id not in (select event_id from attend where username = ?)")) {
 //if ($stmt = $mysqli->prepare("select event_id, title from events")) {
 $stmt->bind_param("ss", $_SESSION["username"], $_SESSION["username"]); 
 $stmt->execute(); 
-$stmt->bind_result($eid, $name); 
+  $stmt->bind_result($id,$title,$description,$stime,$etime,$gid,$group);
 echo '<table border = "2" width = 30%">'; 
-echo "<tr><td> Event ID </td><td> Event Name </td></tr>"; 
+  echo "<tr><td>ID</td><td>Event</td><td>Description</td><td>Start Time</td><td>End Time</td><td>Group</td></tr><br />";
 while ($stmt->fetch()) {
  //$name = n12br(htmlspecialchars($name)); 
- echo "<tr>"; 
- echo "<td> $eid</td>"; 
- echo "<td><a href='event_page.php?event_id=";
- echo $eid; 
- echo "'\>$name</a></td>";
- echo "</tr>";
+	echo "<tr>";
+	echo "<td>$id</td>";
+	echo "<td><a href='event_page.php?event_id=";
+	echo $id;
+	echo "'\>$title</a></td>";
+	echo "<td>$description</td>";
+	echo "<td>$stime</td>";
+	echo "<td>$etime</td>";
+	echo "<td><a href='group_page.php?group_id=";
+	echo $gid;
+	echo "'\>$group</a></td>";
+	echo "</tr>";
 
 }
 echo "</table>";
